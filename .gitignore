@@ -1,0 +1,9 @@
+# Local theme preview and downloaded build dependencies
+/preview/
+/site/node_modules/
+/site/dist/
+/site/.astro/
+/site/.shirones/
+/site/shirones/content/
+/site/public/images/
+/.obsidian/

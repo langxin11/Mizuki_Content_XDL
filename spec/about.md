@@ -1,49 +1,19 @@
+# 关于
 
-This website is built with the **Astro** framework using the [Mizuki](https://github.com/matsuzaka-yuki/mizuki) theme.
+这里是泽夕不嘻嘻的学习与实践笔记，主要记录最优控制、机器人建模，以及科研开发工具的使用经验。
 
-::github{repo="matsuzaka-yuki/Mizuki"}
+## 阅读路线
 
-## 🌟 Theme Features
+CMU 最优控制系列按以下顺序阅读：动力学与数值优化 → LQR → MPC → 非线性轨迹优化 → 旋转与四元数。
 
-### 🎨 Design & User Experience
-- **Modern & Elegant Design** - Clean, minimalist interface with beautiful typography
-- **Fully Responsive** - Optimized for all devices from mobile to desktop
-- **Dark/Light Mode** - Automatic theme switching with smooth transitions
-- **Beautiful Typography** - Enhanced readability with JetBrains Mono font
-- **Smooth Animations** - Fluid page transitions and interactive elements
+开发与排障类文章会说明适用环境和版本。历史故障记录保留当时的现象与处理经过，未证实的尝试不会作为通用修复方法推荐。
 
-### 🔍 Content & Search
-- **Advanced Search** - Powered by [Pagefind](https://pagefind.app/) for fast, accurate results
-- **Enhanced Markdown** - Extended syntax with code highlighting and math support
-- **Interactive Table of Contents** - Auto-scroll navigation for long articles
-- **RSS Feed Generation** - Stay updated with automatic feed generation
-- **Reading Time Estimation** - Know how long articles take to read
-- **Post Categorization** - Organize content with tags and categories
+## 怎样看待验证结果
 
+每篇笔记在文末标注核查日期和范围：**已核查**表示所注明的示例或论述已有核查证据；**部分验证**表示仅完成指定片段；**待复现**表示还没有完整实验结果。核查状态有明确范围，不代表整篇文章、所有软件版本或完整实验都已验证。
 
+学习笔记中的旧图和日志与修订后的代码分别说明。发现错误后会修正文并记录更新日期。
 
-### 📱 Special Pages
-- **Anime Tracking Page** - Track your anime watching progress with ratings
-- **Friends Links Page** - Showcase friend websites with beautiful cards
-- **Diary/Moments Page** - Share life moments like social media posts
-- **Archive Page** - Organized timeline view of all posts
-- **About Page** - Customizable personal introduction (this page!)
+本站使用 [Shirone](https://github.com/LyraVoid/Shirone) 主题。文章和配图在内容仓库维护，外观配置与主题依赖分开保存。
 
-### 🛠 Technical Features
-- **Enhanced Code Blocks** - Powered by [Expressive Code](https://expressive-code.com/)
-- **Math Support** - LaTeX rendering with KaTeX for mathematical expressions
-- **Image Optimization** - PhotoSwipe gallery with lazy loading
-- **SEO Optimized** - Built-in sitemap and meta tags for better search visibility
-- **Performance Optimized** - Fast loading with caching and optimization
-- **Comment System Ready** - Integration support for Twikoo comments
-
-### 🎯 Advanced Markdown Features
-- **Callouts & Admonitions** - Beautiful info boxes with `> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`
-- **Mathematical Equations** - Write LaTeX math with `$inline$` and `$$block$$` syntax
-- **GitHub Cards** - Embed repository cards with `::github{repo="user/repo"}`
-- **Syntax Highlighting** - Advanced code highlighting with line numbers
-- **Copy Code Buttons** - Easy code copying functionality
-
----
-
-*Built with ❤️ using Astro and inspired by modern web design principles.*
+[GitHub](https://github.com/langxin11) · [知乎](https://www.zhihu.com/people/63-21-78-38-42)

@@ -1,0 +1,78 @@
+[
+  {
+    "file": "posts/知乎迁入/onshape-mujoco-closed-loop/cad.png",
+    "source": "https://picx.zhimg.com/v2-1a3e04f1f139a62264f3782d50ea71cb_r.jpg",
+    "bytes": 932520,
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "status": "local"
+  },
+  {
+    "file": "posts/知乎迁入/onshape-mujoco-closed-loop/export.png",
+    "source": "https://pic2.zhimg.com/v2-733a0beb3e41bcb67884e4f9701dfd1d_r.jpg",
+    "bytes": 268579,
+    "dimensions": [
+      1280,
+      677
+    ],
+    "status": "local"
+  },
+  {
+    "file": "posts/知乎迁入/matplotlib-chinese-mathtext/original-example.png",
+    "source": "https://pic2.zhimg.com/v2-6f07b8006a0608c8f771bd7e584ba4d5_r.jpg",
+    "bytes": 111700,
+    "dimensions": [
+      1330,
+      866
+    ],
+    "status": "local"
+  },
+  {
+    "file": "posts/知乎迁入/ubuntu-wezterm/terminal.png",
+    "source": "https://picx.zhimg.com/v2-522497a7671b17ee1932b1cecd1172cd_r.jpg",
+    "bytes": 68642,
+    "dimensions": [
+      3308,
+      2066
+    ],
+    "status": "local"
+  },
+  {
+    "file": "posts/知乎迁入/julia-vscode-intellisense/step-1.png",
+    "source": "https://pica.zhimg.com/v2-233338c85eb8c7b3a7a58139dbd996ac_r.jpg",
+    "bytes": 45645,
+    "dimensions": [
+      1170,
+      341
+    ],
+    "status": "local"
+  },
+  {
+    "file": "posts/知乎迁入/julia-vscode-intellisense/step-2.png",
+    "source": "https://pic1.zhimg.com/v2-b94d349827cb21295a9f4e9f411effc4_r.jpg",
+    "bytes": 89416,
+    "dimensions": [
+      2498,
+      320
+    ],
+    "status": "local"
+  },
+  {
+    "file": "posts/知乎迁入/julia-vscode-intellisense/step-3.png",
+    "source": "https://pic4.zhimg.com/v2-f1d819cc0bfc4615d755acc33be9e12d_1440w.jpg",
+    "bytes": 58073,
+    "dimensions": [
+      985,
+      516
+    ],
+    "status": "local"
+  },
+  {
+    "file": null,
+    "source": "https://pic4.zhimg.com/v2-2054d53dc0ab28815a2fb0a27b39265b_r.jpg",
+    "status": "not_downloaded",
+    "note": "App 入口截图未取得；导出配置截图已保留，原文链接仍可查看全部媒体。"
+  }
+]

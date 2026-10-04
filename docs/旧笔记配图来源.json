@@ -1,0 +1,330 @@
+[
+  {
+    "name": "砖块掉落仿真.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/%E7%A0%96%E5%9D%97%E6%8E%89%E8%90%BD%E4%BB%BF%E7%9C%9F.gif",
+    "local": "images/blog/砖块掉落仿真.gif",
+    "bytes": 143230,
+    "sha256": "79439a7ec1c75e64cbf01cee39568ae5e2bd733eb542a0ea2ca154a6a2595ec3",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "cartpole.png",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/cartpole.png",
+    "local": "images/blog/cartpole.png",
+    "bytes": 83472,
+    "sha256": "d4c433663f0370ff5052c876fe43236514333a21e137abaa90ea9755def2430c",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_10.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_10.svg",
+    "local": "images/blog/HW2_Q1_10.svg",
+    "bytes": 44089,
+    "sha256": "5ff1a2f21cd5121c17a37c3bdd3cab5f0a998cc16002963240dcbcfc232fbe6e",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_2.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_2.svg",
+    "local": "images/blog/HW2_Q1_2.svg",
+    "bytes": 27957,
+    "sha256": "95e3b9b4bb0cb50a7e93cdff782467d2a57e86fc4984b32e0a128ec365d1a1c4",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_3.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_3.svg",
+    "local": "images/blog/HW2_Q1_3.svg",
+    "bytes": 48568,
+    "sha256": "951ddfa332161780af82fd5d05b8c3fd856ad7293bfecfc7972a2d07b397a452",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_4.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_4.svg",
+    "local": "images/blog/HW2_Q1_4.svg",
+    "bytes": 43728,
+    "sha256": "ab474ef27f7abddeff77e2cb29846d3f885b42258517b25caf27fa51ed26a4ed",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_5.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_5.svg",
+    "local": "images/blog/HW2_Q1_5.svg",
+    "bytes": 58237,
+    "sha256": "6eb218abce71a879ac24ca95dc4a87d9467a121add3d46cef4e5ef0f8fee0f26",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_6.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_6.svg",
+    "local": "images/blog/HW2_Q1_6.svg",
+    "bytes": 60835,
+    "sha256": "8db4846be1beb545f0f8d40e289ebbb25e9f72abe3072615bc3a6414243c608c",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_7.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_7.svg",
+    "local": "images/blog/HW2_Q1_7.svg",
+    "bytes": 60444,
+    "sha256": "6a07803063b5823a8a97e3f6e36556550b20055a32e500ea8d7d776ea8339ce4",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_8.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_8.svg",
+    "local": "images/blog/HW2_Q1_8.svg",
+    "bytes": 44079,
+    "sha256": "3c517aeea20ab2ee0570fc76270270f15ed12cbc02a53cd6c16ee2609335cc88",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q1_9.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q1_9.svg",
+    "local": "images/blog/HW2_Q1_9.svg",
+    "bytes": 47515,
+    "sha256": "9636de0497a60d0aa10fc3843379cc2d960ea54709d0f99e4e8defeac2fcac2b",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q2_1.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q2_1.gif",
+    "local": "images/blog/HW2_Q2_1.gif",
+    "bytes": 693632,
+    "sha256": "ca87622f94d8f9aa413ac6c55a4d2516208fcbf9ce91d2364b6357dcfd6bf997",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q2_1.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q2_1.svg",
+    "local": "images/blog/HW2_Q2_1.svg",
+    "bytes": 40030,
+    "sha256": "8492a99395f32de606447a93b6b4eeb2d74cf06f209087e813972e9e2368f790",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q2_2.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q2_2.gif",
+    "local": "images/blog/HW2_Q2_2.gif",
+    "bytes": 625119,
+    "sha256": "6e596cb4f06e923befd2f2bdf66474d43ca846710fae1cd9300d67a039584cbe",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q2_2.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q2_2.svg",
+    "local": "images/blog/HW2_Q2_2.svg",
+    "bytes": 126032,
+    "sha256": "faa59848b0f767665c6c4232014ca1adc156e85f76081cb16b774d52e50c370a",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q2_3.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q2_3.svg",
+    "local": "images/blog/HW2_Q2_3.svg",
+    "bytes": 29288,
+    "sha256": "77c713b3c1347a8466b1d238fe486f9c419950f19d4a8f69e06086a51b51913e",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q2_4.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q2_4.svg",
+    "local": "images/blog/HW2_Q2_4.svg",
+    "bytes": 52171,
+    "sha256": "cb1544bdece41b911112f2bd06094cb3d0e2553ed15cc64f65dd1fc291284160",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q3_convex.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_convex.svg",
+    "local": "images/blog/HW2_Q3_convex.svg",
+    "bytes": 113456,
+    "sha256": "97c30a336ac9a4700eb84e799c3fe466ed18e8bc919e99d955cb2575e719c53f",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q3_LQR.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_LQR.svg",
+    "local": "images/blog/HW2_Q3_LQR.svg",
+    "bytes": 126007,
+    "sha256": "3d8e914278131a72728141ca84b585946d39b18a10c39be3b9cf1e2fa2bac01e",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q3_MPC.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_MPC.gif",
+    "local": "images/blog/HW2_Q3_MPC.gif",
+    "bytes": 906160,
+    "sha256": "ab83c0931348998abad89d8c59d5252105a6c57dd393643a09586de1710031e8",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW2_Q3_MPC.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_MPC.svg",
+    "local": "images/blog/HW2_Q3_MPC.svg",
+    "bytes": 113456,
+    "sha256": "573bd8aedcc8c852c32f9e25cc2457abcf0fc5033d7b3b57057d77401cbe7a3d",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q1_C1.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q1_C1.svg",
+    "local": "images/blog/HW3_Q1_C1.svg",
+    "bytes": 45452,
+    "sha256": "28d927bb14cb4ad6651d5335339d00e3744fe129aba24947027c68c7f2e496a2",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q1_C2.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q1_C2.svg",
+    "local": "images/blog/HW3_Q1_C2.svg",
+    "bytes": 37037,
+    "sha256": "4e0fa58ef0a6ed914fd58b4de6623825ae4a9006b2339ab16edae2e342e1e6b4",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q1_DIRCOL.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q1_DIRCOL.gif",
+    "local": "images/blog/HW3_Q1_DIRCOL.gif",
+    "bytes": 169124,
+    "sha256": "df20f6519322210a9ae86b775b0deaa78157dd2a574ab44b6f463bca2883803c",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_1.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_1.svg",
+    "local": "images/blog/HW3_Q2_1.svg",
+    "bytes": 40767,
+    "sha256": "90e26ee1277adceef6517b0756c8e02294577ad64134c3683c734460cb8916a1",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_2.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_2.svg",
+    "local": "images/blog/HW3_Q2_2.svg",
+    "bytes": 36229,
+    "sha256": "abf430ba857e7f8074f2bcabe6666c57ce7643f2f4c564087a38e29d1eb437f8",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_3.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_3.svg",
+    "local": "images/blog/HW3_Q2_3.svg",
+    "bytes": 38053,
+    "sha256": "6d81683c1f1ab8d8aedbb77e59a70445eeaf41e68e21a71240582828b2e92f42",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_4.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_4.svg",
+    "local": "images/blog/HW3_Q2_4.svg",
+    "bytes": 47631,
+    "sha256": "66cd959295629983a69b06d4077714a50d1b84fe5b3a47ffa866f7409dc3f3b0",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_5.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_5.svg",
+    "local": "images/blog/HW3_Q2_5.svg",
+    "bytes": 47654,
+    "sha256": "dcdd255a4254982158ce3cb948e94ba0ac8c822d05339721d63a2e436e5e14fb",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_6.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_6.svg",
+    "local": "images/blog/HW3_Q2_6.svg",
+    "bytes": 55881,
+    "sha256": "7c78d4313b30ebd6cb9a6fddd032b6c1b48f064afd4e490f3f4eb40b59144c67",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_7.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_7.svg",
+    "local": "images/blog/HW3_Q2_7.svg",
+    "bytes": 55542,
+    "sha256": "e53500c0f1c35ca928510947f493891a09be656119824821e4e4102f3ecdf1c9",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q2_iLQR.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_iLQR.gif",
+    "local": "images/blog/HW3_Q2_iLQR.gif",
+    "bytes": 452382,
+    "sha256": "7900d70171d1d1a5d33e261e526ecaa1e97068c855f58c6bf5ffec44d0040fd0",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q3_1.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_1.svg",
+    "local": "images/blog/HW3_Q3_1.svg",
+    "bytes": 65206,
+    "sha256": "f5eeea9ef987395921c23d44c05fffe779313ce5162f9b491d1036f3b21ddf51",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q3_2.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_2.svg",
+    "local": "images/blog/HW3_Q3_2.svg",
+    "bytes": 47893,
+    "sha256": "fa82dcc9acc5a1fcaec6e49bb8ec12befe774accc413d05f55b77398a0c0e90a",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q3_3.svg",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_3.svg",
+    "local": "images/blog/HW3_Q3_3.svg",
+    "bytes": 45231,
+    "sha256": "295bc6ef8cc44410e58cd59d8a4f611f955cc9c2666a57bc85cd7a33bce22b47",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "HW3_Q3_DIRCOL.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_DIRCOL.gif",
+    "local": "images/blog/HW3_Q3_DIRCOL.gif",
+    "bytes": 529751,
+    "sha256": "bd73fb14fc9360563fe64700f6d926e429f56aaa7beb1473c9a55e87a1d87243",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "image-20250716230521679.png",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250716230521679.png",
+    "local": "images/blog/image-20250716230521679.png",
+    "bytes": 62867,
+    "sha256": "8e94c247928f78595a4a501feaa9d5650536a5cbb5678ae77d87cd53994b049b",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "image-20250805185855595.png",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250805185855595.png",
+    "local": "images/blog/image-20250805185855595.png",
+    "bytes": 88802,
+    "sha256": "9e4841b1d9a9f0fba499a6559eaf21b04b5adfb611c809ca54ed9cbf66aa9f9f",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "image-20250805185947239.png",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250805185947239.png",
+    "local": "images/blog/image-20250805185947239.png",
+    "bytes": 105359,
+    "sha256": "96fd382d8598d308fb446a68b5b623d4fcd260c3986e52431238817cd4b3b6b8",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "image-20250805190032028.png",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250805190032028.png",
+    "local": "images/blog/image-20250805190032028.png",
+    "bytes": 96496,
+    "sha256": "e92aaea9d77a5820f0c820faff09967103bfbe8f8a47eea66b21e383cc16f9c2",
+    "checked": "2026-10-04"
+  },
+  {
+    "name": "Lecture13_DIRCOL.gif",
+    "source": "https://raw.githubusercontent.com/langxin11/Picture/main/blog/Lecture13_DIRCOL.gif",
+    "local": "images/blog/Lecture13_DIRCOL.gif",
+    "bytes": 264024,
+    "sha256": "3ed9223e094023b2fd9c793e160212b790b40edc442b89bfd7d8b7a0c90df290",
+    "checked": "2026-10-04"
+  }
+]

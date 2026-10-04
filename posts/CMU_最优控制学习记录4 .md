@@ -1,43 +1,58 @@
 ---
-title: CMU Optimal control and reinforcement learning 16-745 2025学习简要记录4
+title: CMU 最优控制笔记 4：非线性轨迹优化、DDP 与 iLQR
 author: Daliang
 published: 2025-07-28
+updated: 2026-10-04
+description: 整理直接配点、DDP 和 iLQR 的基本思路、反向与前向步骤，以及小车倒立摆和四旋翼作业实现。
 toc: true
 toc-depth: 4
 toc-title: Contents
 tags:
-  - 优化控制
+  - 最优控制
+  - DDP
+  - iLQR
+  - 轨迹优化
+  - Julia
 category: "CMU Optimal Control 16-745"
 licenseName: "CC BY 4.0"
 ---
-# CMU Optimal control and reinforcement learning 16-745 2025学习简要记录4
 
-主要是配合Homework来的（在[课程官网答案](https://optimalcontrol.ri.cmu.edu/homeworks/)有完整的代码）
+学完线性二次型问题后，我继续整理非线性轨迹优化，包括直接配点、DDP 与 iLQR 的方法和作业实践。推导部分与长代码可以分开阅读。
 
-较早的更完整的课程记录可以参考[向阳的笔记](https://github.com/Zhihaibi/Optimal_control_16-745/blob/main/CMU16_745_Optimial%20control%20Lecture_Notes_zhihai%20Bi.pdf)和知乎[我爱科研](https://www.zhihu.com/column/c_1635315526615388160) 的整理
+**先修知识：** LQR、动态规划、二阶泰勒展开，以及非线性动力学的数值积分。
+
+**阅读路线：**
+
+1. 先区分轨迹离散化和优化求解的不同思路，理解直接配点的作用。
+2. 再沿值函数、局部二次近似、反向递推和前向线搜索阅读 DDP/iLQR。
+3. 最后按小车倒立摆、四旋翼轨迹优化和姿态调整三个案例查看实现。
+
+笔记结合 CMU 16-745 的课程与作业整理，相关材料见[课程作业页面](https://optimalcontrol.ri.cmu.edu/homeworks/)。文中的代码片段保留学习时的实现，运行时还需使用对应作业的依赖与上下文。
+
+其他学习视角可参考[向阳的笔记](https://github.com/Zhihaibi/Optimal_control_16-745/blob/main/CMU16_745_Optimial%20control%20Lecture_Notes_zhihai%20Bi.pdf)和知乎[我爱科研](https://www.zhihu.com/column/c_1635315526615388160) 的整理
 
 ## Lecture 11-12 Nonlinear Trajectory Optimization/Differential Dynamic Programming
 
-对于非线性轨迹优化问题，求解的方法分为shooting Method 和 collocation methods即直接法和间接法。
+非线性轨迹优化可以采用不同的参数化与求解方式。Shooting（打靶）和 collocation（配点）不能简单地分别等同于直接法和间接法：直接打靶和直接配点都属于常见的直接方法；间接方法通常从最优性必要条件出发构造待求解方程。
 
-直接法通过将轨迹优化问题转化为标准的大规模非线性优化问题，利用现成的开源/善用的非线性求解器（IPOPT，mosek,yalmip...）。常见的非线性优化策略是基于序列二次规划的SQP方法。动力学约束推荐采用Hermite-Simpson 方法,比显示的RK4稳定性强、计算成本低。
+直接配点把离散状态和控制作为优化变量，将动力学离散为约束，再交给非线性优化求解器。Hermite–Simpson 是常用配点方案，但不能笼统地说它在所有问题中都比 RK4 更稳定或成本更低。方法比较需结合步长、误差、问题规模和求解器。分类与直接配点可参考 [MIT 的轨迹优化讲义](https://underactuated.mit.edu/trajopt.html)。
 
 **注意**
 
-课程演示的代码 `dircol.ipynb`在我的本地运行到z_sol = solve(z0,prob) 给出报错
+课程演示的代码 `dircol.ipynb` 在本地运行到 `z_sol = solve(z0,prob)` 时给出报错
 
 ```markdown
 ERROR: TypeError: in typeassert, expected Vector{Tuple{Int64, Int64}}, got a value of type Vector{Tuple{Any, Any}}
 ```
 
-检查发现需要修改 `row_col!` 函数和 `sparsity_jacobian`稀疏矩阵生成部分，确保返回的是明确的 `Int64` 类型元组
+在当时使用的接口与代码组合中，通过修改 `row_col!` 和 `sparsity_jacobian` 的索引类型处理了该错误。原记录没有完整依赖版本，这只能作为类型不匹配的排查线索，不能认定所有版本都必须改为 `Int64`。
 
 ```
 row = Int64[]#而不是row=[]
 col = Int64[]
 ```
 
-同时在using Meshcat是给出报错
+当时执行 `using MeshCat` 时还遇到报错
 
 ```
 InitError: could not load library "C:\Users\26583\.julia\artifacts\8f71eb37d5b304026b6363d835f8c65ff1920339\bin\avdevice-61.dll"
@@ -46,16 +61,19 @@ The specified module could not be found.
 during initialization of module FFMPEG_jll
 ```
 
-表明无法找到 FFMPEG 的动态链接库文件，需要运行如下代码
+这表明 FFMPEG 动态库或其依赖加载失败，不能仅凭错误推断需要重新编译。原记录曾尝试对 `FFMPEG_jll` 和 MeshCat 执行 build/add，但没有保留可确认因果关系的日志，因此移除这组“一键修复”命令。
+
+JLL 通常通过 artifacts 提供预构建二进制，`Pkg.build` 不是重新编译任意 JLL 动态库的通用办法。先在原作业环境记录以下信息，再根据具体缺失文件、平台支持与依赖加载错误排查；见 [BinaryBuilder 的 JLL 说明](https://docs.binarybuilder.org/stable/jll/)。
 
 ```julia
-Pkg.build("FFMPEG_jll")
-Pkg.build("MeshCat")
-Pkg.add("FFMPEG_jll")
-using MeshCat
+using Pkg
+versioninfo()
+Pkg.status()
+# 在新 Julia 进程中单独执行 using MeshCat，并保留完整错误栈。
+# 不要先改动依赖版本、添加间接依赖或删除整个 artifacts 目录。
 ```
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/Lecture13_DIRCOL.gif)
+![](/images/blog/Lecture13_DIRCOL.gif)
 
 微分动态规划（Differential Dynamic Programming, DDP）是一种用于求解非线性最优控制问题的迭代算法，结合动态规划和二阶泰勒展开的思想，通过局部近似和反向传播来高效地优化控制策略。
 
@@ -81,7 +99,7 @@ $$
 \end{aligned}
 $$
 
-### Solving the DDR/iLQR
+### DDP/iLQR：反向递推与前向更新
 
 **反向传播（Backward Pass）**
 
@@ -90,7 +108,7 @@ $$
    在时间步，值函数$V_k(\mathbf{x})$为从状态$\mathbf{x}_k$出发，采用最优控制策略$\pi^*$的最小总代价
 
    $$
-   V_k(\mathbf{x})=\min_{\mathbf{u}_t,...,\mathbf{u}_{N-1}} \left( \sum_{j=k}^{N-1}{\ell (\mathbf{x}_j,\mathbf{u}_j)}+\ell _N(\mathbf{x}_N) \right)
+   V_k(\mathbf{x})=\min_{\mathbf{u}_k,...,\mathbf{u}_{N-1}} \left( \sum_{j=k}^{N-1}{\ell (\mathbf{x}_j,\mathbf{u}_j)}+\ell _N(\mathbf{x}_N) \right)
    $$
 2. 贝尔曼方程
 
@@ -144,13 +162,13 @@ $$
    iLQR的不同在于忽略$\bf f_{xx}$等二阶项
 4. 最优控制修正
 
-   通过最小化$V_k(\mathbf{x}_k)$也即$\nabla_\mathbf{u} V_k(\mathbf{x}_k+\Delta \mathbf{x})$得到最优控制修正
+   固定当前状态扰动，对局部二次近似的 $Q_k$ 关于输入扰动求极小，得到控制修正（假设 $Q_{\mathbf{uu}}$ 正定；否则需要正则化）
 
    $$
    \Delta \mathbf{u}_{k}^{\star}=-Q_{\mathbf{uu}}^{-1}Q_{\mathbf{u}}-Q_{\mathbf{uu}}^{-1}Q_{\mathbf{ux}}\Delta \mathbf{x}_k
    $$
 
-   其中，反馈增益$K_k=-Q_{\mathbf{uu}}^{-1}Q_{\mathbf{ux}}$，前馈增益$j_k=Q_{\mathbf{uu}}^{-1}Q_{\mathbf{u}}$
+   其中，反馈增益$K_k=-Q_{\mathbf{uu}}^{-1}Q_{\mathbf{ux}}$，前馈增益$j_k=-Q_{\mathbf{uu}}^{-1}Q_{\mathbf{u}}$
 5. 更新值函数的二次近似
 
    $$
@@ -179,13 +197,15 @@ $$
 \end{aligned}
 $$
 
-通过$J_new-J$进行linesearch
+通过比较新旧轨迹代价进行线搜索，选择合适的步长 $\alpha$。这里统一令前馈修正 $j_k=-Q_{uu}^{-1}Q_u$，因此前向更新使用加号；不能把正号定义的 $j_k$ 直接代入这一更新式。
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250805185855595.png" alt="image-20250805185855595" style="zoom: 50%;" />
+上面的反向递推是局部无约束子问题的形式。开头列出的状态和输入约束需要额外的约束处理机制，例如增广拉格朗日；不能仅写入问题描述就认为普通 iLQR 已处理约束。参考 [AL-iLQR Tutorial](https://bjack205.github.io/papers/AL_iLQR_Tutorial.pdf)。
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250805185947239.png" alt="image-20250805185947239" style="zoom:50%;" />
+<img src="/images/blog/image-20250805185855595.png" alt="image-20250805185855595" style="zoom: 50%;" />
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/image-20250805190032028.png" alt="image-20250805190032028" style="zoom:50%;" />
+<img src="/images/blog/image-20250805185947239.png" alt="image-20250805185947239" style="zoom:50%;" />
+
+<img src="/images/blog/image-20250805190032028.png" alt="image-20250805190032028" style="zoom:50%;" />
 
 ### HW3_Q1 倒立摆小车DIRCOL示例
 
@@ -502,11 +522,11 @@ EXIT: Optimal Solution Found.
 
 类似HW2 Q2 PartC,使用DIRCOL得到的开环状态轨迹$X$和控制轨迹$U$，通过TVLQR跟踪该轨迹以补偿模型失配。DIRCOL的动力学约束使用了Hermite-Simpson积分方法，但闭环控制使用RK4进行数值积分，并且对闭环控制进行截断（clamp.(U[k],-10,10)）防止违约。
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q1_C1.svg)
+![](/images/blog/HW3_Q1_C1.svg)
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q1_C2.svg)
+![](/images/blog/HW3_Q1_C2.svg)
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q1_DIRCOL.gif" style="zoom:50%;" />
+<img src="/images/blog/HW3_Q1_DIRCOL.gif" style="zoom:50%;" />
 
 ### HW3_Q2 四旋翼无人机iLQR 示例
 
@@ -551,12 +571,14 @@ $$
 针对此问题，选取如下的状态代价函数和终端代价函数来促使无人机跟踪设定的参考轨迹$x_{ref}$:
 
 $$
+\begin{gathered}
 \ell(x_i,u_i) = \frac{1}{2} (x_i - x_{ref,i})^TQ(x_i - x_{ref,i}) + \frac{1}{2}(u_i - u_{ref,i})^TR(u_i - u_{ref,i})\\
 
 \ell_N(x_N) = \frac{1}{2}(x_N - x_{ref,N})^TQ_f(x_N - x_{ref,N})
+\end{gathered}
 $$
 
-在这里我们需要补充 `iLQR`的实现过程，用反向传播（backward pass）计算的值函数增量来判断iLQR的收敛$\Delta J < \text{atol}$，并在solve_quadrotor_trajectory函数中调用。
+这里需要补充 `iLQR`的实现过程，用反向传播（backward pass）计算的值函数增量来判断iLQR的收敛$\Delta J < \text{atol}$，并在solve_quadrotor_trajectory函数中调用。
 
 **cost function的实现**
 
@@ -598,15 +620,9 @@ end
 
 **反向传播（backward pass）**
 
-注意：我在参考课程给出的参考答案[Q3.ipynb](https://github.com/Optimal-Control-16-745/HW3_S25_Solutions/blob/main/Q3.ipynb)时，发现无法在我的电脑运行，调试之后发现在iLQR第一迭代时计算K[1]为空值因此加了一个判断进行修正
+原实现曾在 `K[k]` 出现 NaN 时直接替换为 `K[k+1]`。这会掩盖反向递推失败，相邻时刻的增益也不能随意替代，因此已移除。对称标量代价的二阶导数应满足 `Qxu = Qux'`；单独重算交叉项不能证明 NaN 的原因是累计误差。
 
-```julia
-if any(isnan,K[k])
-    K[k] = K[k+1] #k=1时出错K[1] =[NaN,...]
-end
-```
-
-并且使用Qxu = Qux'（理论上成立）会报错，需使用Qxu = A_k'*P[k+1]*B_k来分别计算Qxu和Qux，具体原因还不太清楚，大概率是数值计算存在累计误差导致P[k+1]不完全对称。
+下面增加有限值检查、对称化和基于 Cholesky 的正定性检查。对称化只适合小幅数值漂移；若不对称误差较大，应追查导数和递推实现。代码仍依赖作业的 `discrete_dynamics` 等函数，未完成原四旋翼实验复现。
 
 ```julia
 function backward_pass(params::NamedTuple,          # useful params 
@@ -639,6 +655,7 @@ function backward_pass(params::NamedTuple,          # useful params
 
         A_k = FD.jacobian(_x -> discrete_dynamics(params, _x, U[k], k), X[k])
         B_k = FD.jacobian(_u -> discrete_dynamics(params, X[k], _u, k), U[k])
+        @assert all(isfinite, A_k) "A_k has NaN or Inf at step $k"
         @assert all(isfinite, B_k) "B_k has NaN or Inf at step $k"
         gx = Jx + A_k' * p[k+1]
         gu = Ju + B_k' * p[k+1]
@@ -646,34 +663,32 @@ function backward_pass(params::NamedTuple,          # useful params
         Qxx = Jxx + A_k' * P[k+1] * A_k
         Quu = Juu + B_k' * P[k+1] * B_k
         Qux = B_k' * P[k+1] * A_k
-        Qxu = A_k'*P[k+1]*B_k
-        #Qxu = Qux'     #出错
+        Qxu = Qux'
   
         β = 1e-1
-        Quu_reg = Juu + B_k' * (P[k+1]+β*I) * B_k
-        Qux_reg = B_k' * (P[k+1]+β*I) * A_k
+        @assert all(isfinite, Quu) && all(isfinite, Qux) && all(isfinite, gu)
+        Quu = (Quu + Quu')/2
+        F = nothing
   
         for i =1:15
-            if any(isnan, Quu_reg) || abs(det(Quu_reg)) < 1e-8
-                @warn "Quu_reg is singular or has NaN at step $k"
-                β = β*10
-                Quu_reg = Juu + B_k' * (P[k+1]+β*I) * B_k  
-            else
+            candidate = cholesky(Symmetric(Quu + β*I); check=false)
+            if issuccess(candidate)
+                F = candidate
                 break
             end
+            β *= 10
         end
   
-        d[k] = -(Quu_reg) \ gu
-        K[k] = -(Quu_reg) \ Qux_reg
-
-        if any(isnan,K[k])
-            K[k] = K[k+1] #k=1时出错K[1] =[NaN,...]
-        end
+        F === nothing && error("Quu regularization failed at step $k")
+        d[k] = -(F \ gu)
+        K[k] = -(F \ Qux)
+        @assert all(isfinite, d[k]) && all(isfinite, K[k])
 
         p[k] = gx + K[k]' * gu + K[k]' * Quu * d[k]  + Qxu * d[k]
         P[k] = Qxx + K[k]' * Quu * K[k] + Qxu * K[k] + K[k]' * Qux
-        #ΔJ += -d[k]' * gu + 0.5 * d[k]' * Quu * d[k]
-        ΔJ += -d[k]' * gu 
+        P[k] = (P[k] + P[k]')/2
+        # α=1 的局部二次模型预测下降；实际下降仍需前向验证。
+        ΔJ += -(dot(d[k], gu) + 0.5*dot(d[k], Quu*d[k]))
     end
     return d, K, ΔJ
 end
@@ -729,7 +744,7 @@ function forward_pass(params::NamedTuple,           # useful params
             Xn[k+1] = discrete_dynamics(params, Xn[k], Un[k], k)
         end
         Jn = trajectory_cost(params, Xn, Un)
-        if Jn < J||i==max_linesearch_iters
+        if isfinite(Jn) && Jn < J
             return Xn, Un, Jn, α
         else
             α = 0.5 * α
@@ -772,15 +787,15 @@ function iLQR(params::NamedTuple,         # useful params for costs/dynamics/ind
 
     for ilqr_iter = 1:max_iters
         d, K, ΔJ = backward_pass(params, X, U)
-        Xn, Un, J, α = forward_pass(params, X, U, d, K)
-        X, U = Xn, Un
-        # termination criteria 
-        if ΔJ < atol
+        # 只在有限、非负的预测下降足够小时停止；不能将负值当作收敛。
+        if isfinite(ΔJ) && 0 <= ΔJ < atol
             if verbose
                 @info "iLQR converged"
             end
             return X, U, K
         end
+        Xn, Un, J, α = forward_pass(params, X, U, d, K)
+        X, U = Xn, Un
 
         # ---------------logging -------------------
         if verbose
@@ -889,25 +904,27 @@ iter     J           ΔJ        |d|         α
  15    4.395e+01   1.40e-04   5.39e-03  1.0000
 ```
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_1.svg" />
+<img src="/images/blog/HW3_Q2_1.svg" />
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_2.svg)
+![](/images/blog/HW3_Q2_2.svg)
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_3.svg)
+![](/images/blog/HW3_Q2_3.svg)
 
-![HW3_Q2_4](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_4.svg)
+![HW3_Q2_4](/images/blog/HW3_Q2_4.svg)
 
-![HW3_Q2_5](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_5.svg)
+![HW3_Q2_5](/images/blog/HW3_Q2_5.svg)
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_iLQR.gif" style="zoom:50%;" />
+<img src="/images/blog/HW3_Q2_iLQR.gif" style="zoom:50%;" />
 
 #### Part B:Tracking solution with TVLQR
 
 通过iLQR生成的轨迹是开环，实际中会因模型误差（如风扰、参数不准）而偏离，这里使用iLQR得到的参考轨迹$\{\mathbf{x}_{ilqr,k},\mathbf{U}_{ilqr,k}\}_{k=1}^{N}$和时变增益矩阵$\{\mathbf{K}_{ilqr,k}\}_{k=1}^{N-1}$获得**TVLQR**反馈控制(注意K的正负号，这里输出的k=-Quu\Qux,自带了负号)
 
 $$
+\begin{gathered}
 \mathbf{u}_{sim,k}=\mathbf{u}_{ilqr,k}+K_{ilqr,k}(\mathbf{x}_{sim,k}-\mathbf{x}_{ilqr,k})\\
-\mathbf{x}_{sim,k+1} =rk4(\text{real  model},\mathbf{x}_{ilqr,k})
+\mathbf{x}_{sim,k+1} =\operatorname{rk4}(\text{real model},\mathbf{x}_{sim,k},\mathbf{u}_{sim,k},\Delta t)
+\end{gathered}
 $$
 
 ```julia
@@ -925,7 +942,7 @@ $$
     # simulate closed loop system 
     nx, nu, N = params.nx, params.nu, params.N
     Xsim = [zeros(nx) for i = 1:N]
-    Usim = [zeros(nx) for i = 1:(N-1)]
+    Usim = [zeros(nu) for i = 1:(N-1)]
   
     # initial condition 
     Xsim[1] = 1*Xilqr[1]
@@ -940,14 +957,14 @@ $$
 
 TVLQR结果如下
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_6.svg)
+![](/images/blog/HW3_Q2_6.svg)
 
-![HW3_Q2_7](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q2_7.svg)
+![HW3_Q2_7](/images/blog/HW3_Q2_7.svg)
 
 ### HW3_Q3:Quadrotor Reorientation (40 pts)
 
 $$
-\begin{align} x = \begin{bmatrix} p_x \\ p_z \\ \theta \\ v_x \\ v_z \\ \omega \end{bmatrix}, &\quad \quad  \end{align} \dot{x} = \begin{bmatrix}v_x \\ v_z \\ \omega \\ \frac{1}{m}(u_1 + u_2)\sin\theta \\ \frac{1}{m}(u_1 + u_2)\cos\theta \\ \frac{\ell}{2J}(u_2 - u_1)\end{bmatrix}
+ x = \begin{bmatrix} p_x \\ p_z \\ \theta \\ v_x \\ v_z \\ \omega \end{bmatrix},\qquad \dot{x} = \begin{bmatrix}v_x \\ v_z \\ \omega \\ \frac{1}{m}(u_1 + u_2)\sin\theta \\ \frac{1}{m}(u_1 + u_2)\cos\theta-g \\ \frac{\ell}{2J}(u_2 - u_1)\end{bmatrix}
 $$
 
 **问题要求**
@@ -971,21 +988,31 @@ $$
 实际中将三架无人机各自的状态变量和控制变量进行合并，$z$为整个要求解的优化变量
 
 $$
+\begin{gathered}
 x_i =[x1_{i};x2_{i};x3_{i}]\\
 u = [u1_{i};u2_{i};u3_{i}]\\
 z=[x_1;u_1;...;u_{N-1};x_N ]
+\end{gathered}
 $$
 
-并且在处理碰撞约束的时候使用 `norm()^2>=R^2`的形式，保证可微性。
+碰撞约束可写成 $(p_i-p_j)^\top(p_i-p_j)\ge R^2$，代码用 `sum(abs2, p_i-p_j)`，直接表达平滑的平方距离，避免先计算零点不可微的 `norm` 再平方。该约束是非凸的，且只在离散节点满足距离下限不足以保证节点之间或有尺寸的无人机无碰撞；还需加密轨迹验证并纳入几何尺寸。
 
 初始轨迹的生成可以使用 `x_initialize = range(xic, xg, length = N)`
 
 整体的代码框架与HW3_Q1基本一致，结果如下
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_DIRCOL.gif" style="zoom:50%;" />
+<img src="/images/blog/HW3_Q3_DIRCOL.gif" style="zoom:50%;" />
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_1.svg)
+![](/images/blog/HW3_Q3_1.svg)
 
-![HW3_Q3_2](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_2.svg)
+![HW3_Q3_2](/images/blog/HW3_Q3_2.svg)
 
-![HW3_Q3_3](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW3_Q3_3.svg)
+![HW3_Q3_3](/images/blog/HW3_Q3_3.svg)
+
+## 整理与核查说明
+
+本笔记原有许可为 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。引用的课程材料、代码和图片仍须遵守其各自的许可。
+
+**核查状态：部分验证（2026-10-04）。** Julia 1.10.10 的简化线性测试检验 iLQR 递推与线搜索拒绝逻辑；原四旋翼和 DIRCOL 实验待复现。
+
+2026-10-04 整理时修正了已定位的公式和实现问题。文中的图片、动画和输出保留自学习时的实验记录，不代表修订后的代码已经完整重跑。作业片段依赖原项目环境，不能直接作为完整可运行教程；具体核查范围与尚未复现事项见正文。

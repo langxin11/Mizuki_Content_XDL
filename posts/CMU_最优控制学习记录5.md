@@ -1,23 +1,39 @@
 ---
-title: CMU Optimal control and reinforcement learning 16-745 2025学习简要记录5
+title: CMU 最优控制笔记 5：旋转矩阵、四元数与刚体姿态
 author: Daliang
 published: 2025-08-07
+updated: 2026-10-04
+description: 整理三维旋转的坐标变换、单位四元数、姿态运动学与数值积分，并比较旋转矩阵和四元数的约束。
 toc: true
 toc-depth: 4
 toc-title: Contents
 tags:
-  - 优化控制
-  - 四元数/旋转矩阵
+  - 最优控制
+  - 四元数
+  - 旋转矩阵
+  - Julia
 category: "CMU Optimal Control 16-745"
 licenseName: "CC BY 4.0"
 ---
-# CMU Optimal control and reinforcement learning 16-745 2025学习简要记录5
+
+学习三维姿态表示时，我把旋转矩阵和单位四元数放在一起比较。下面先明确坐标系约定，再整理角速度、姿态微分方程以及数值积分后的约束检查。
+
+**先修知识：**线性代数、叉乘、刚体动力学与常微分方程数值积分。
+
+**阅读路线：**
+
+1. 从世界坐标系与机体坐标系之间的变换理解旋转矩阵。
+2. 用四元数乘法、共轭与单位长度约束表示旋转。
+3. 对照两种姿态动力学实现，检查积分后的正交性和四元数模长。
+
 
 ## Lecture 14 旋转
 
-主要介绍了如何描述物体旋转的一些参数化表示方法，欧拉角（俯仰角、偏航角和滚转角）的描述十分直观，但仅靠三个参数会出现奇异性（即是某些姿态参数化表示不唯一或者无法表示）。引入旋转矩阵和单位四元数克服旋转描述的非奇异性。
+欧拉角直观，但在特定姿态存在参数化奇异性。旋转矩阵和单位四元数可以避免欧拉角的这类奇异性，代价是使用冗余参数并满足相应约束；此外，$q$ 与 $-q$ 表示同一旋转，四元数表示也不是唯一的。
 
-### **旋转矩阵**
+本文约定 $Q$ 将机体系向量变换到世界系，四元数按“实部在前”排列，姿态运动学中的角速度用机体系表示。换用其他约定时，乘法顺序和符号都要重新核对。
+
+### 旋转矩阵
 
 三维空间坐标点在以$[\mathbf{e}_{1},\mathbf{e}_{2},\mathbf{e}_{3}]$单位正交基组成的世界坐标系$\mathcal{N}$中的描述和在体坐标系$\mathcal{B}$（基底$[\mathbf{e}_{1}',\mathbf{e}_{2}',\mathbf{e}_{3}']$）是一致的，即有
 
@@ -51,11 +67,11 @@ $Q$是旋转矩阵，是一个行列式为1的正交矩阵，它的逆就是它�
 
 - $Q^\mathrm{T}Q=I$
 - $det(Q)=1$
-- $Q\in SO(3)$ special orthogoual in 3D
+- $Q\in SO(3)$ special orthogonal in 3D
   拓展：特殊欧式群（special Euclidean Group）SE(3)
 
 $$
-SE(3)=\{T=\left[\begin{array}{c}
+SE(3)=\{T=\left[\begin{array}{cc}
 R & t\\ \mathbf{0}_{1\times3}&1
 \end{array}\right] \in \mathbb{R}^{4\times4}|R\in SO(3),t\in \mathbb{R}^{3} \}
 $$
@@ -79,23 +95,23 @@ $$
 当物体以$\omega$的角速度旋转，那么${^N}\mathbf{x}$的导数
 
 $$
-{^N}\dot{x}={^N}\omega\times{^N}x={_{N}^B}Q({^B}\omega\times{^B}x)
+{^N}\dot{x}={^N}\omega\times{^N}x=Q({^B}\omega\times{^B}x)
 $$
 
 那么
 
 $$
-\dot Q(t){^B}\mathbf{x}={_{N}^B}Q({^B}\omega\times{^B}x\rightarrow\dot{Q}=Q\hat{\omega}
+\dot Q(t){^B}\mathbf{x}=Q({^B}\omega\times{^B}x)\quad\Longrightarrow\quad\dot{Q}=Q\widehat{{^B}\omega}
 $$
 
 $$
 Q_{k+1} = Q_{k}+\dot{Q}_{k}\Delta t
 $$
 
-### **四元数**(一个实部、三个虚部)
+### 四元数：一个实部与三个虚部
 
 $$
-\mathbf{q}=\omega+x\mathbf{i}+y\mathbf{j}+z\mathbf{k}
+\mathbf{q}=w+x\mathbf{i}+y\mathbf{j}+z\mathbf{k}
 $$
 
 本文讨论的都是单位四元数
@@ -162,16 +178,16 @@ $$
 用四元数表示刚体的姿态运动学quaternion Kinematics
 
 $$
-\dot{\mathbf{q}}=\frac{1}{2}L(\mathbf{q})Hw
+\dot{\mathbf{q}}=\frac{1}{2}L(\mathbf{q})H\boldsymbol{\omega}
 $$
 
 那么完整的位置和姿态运动学方程和速度和角速度动力学方程如下
 
 $$
-\dot{\mathbf{x}} = \begin{bmatrix} \dot{\mathbf{r}} \\ \dot{\mathbf{q}} \\ \dot{\mathbf{v}} \\ \dot{\boldsymbol{\omega}} \end{bmatrix} = \begin{bmatrix} \mathbf{v} \\ \frac{1}{2} \mathbf{q} \otimes \hat{\boldsymbol{\omega}} = \frac{1}{2} \mathbf{L}(\mathbf{q}) \mathbf{H} \boldsymbol{\omega} \\ \frac{1}{m} {}^W\mathbf{F}(\mathbf{x}, \mathbf{u}) \\ \mathbf{J}^{-1} \left( {}^B\mathbf{\tau}(\mathbf{x}, \mathbf{u}) - \boldsymbol{\omega} \times \mathbf{J} \boldsymbol{\omega} \right) \end{bmatrix}
+\dot{\mathbf{x}} = \begin{bmatrix} \dot{\mathbf{r}} \\ \dot{\mathbf{q}} \\ \dot{\mathbf{v}} \\ \dot{\boldsymbol{\omega}} \end{bmatrix} = \begin{bmatrix} \mathbf{v} \\ \frac{1}{2}L(\mathbf{q})H\boldsymbol{\omega} \\ \frac{1}{m} {}^W\mathbf{F}(\mathbf{x}, \mathbf{u}) \\ \mathbf{J}^{-1} \left( {}^B\mathbf{\tau}(\mathbf{x}, \mathbf{u}) - \boldsymbol{\omega} \times \mathbf{J} \boldsymbol{\omega} \right) \end{bmatrix}
 $$
 
-其中$^W\mathbf{F}(\mathbf{x}, \mathbf{u})$是世界坐标系下的外力表示，$^B\mathbf{\tau}(\mathbf{x}, \mathbf{u})$是机体坐标系的外力矩
+其中 $H\omega=[0;\omega]$ 为纯虚四元数，不能与 $3\times3$ 叉乘矩阵 $\hat\omega$ 混用。$^W\mathbf F$ 为世界系的总外力（有重力时应包含它），$^B\tau$ 为机体系的总外力矩，$J$ 为机体系中恒定的惯性矩阵。
 
 ### 刚体姿态动力学分析
 
@@ -212,27 +228,6 @@ $$
 
    </details>
 
-   ```Julia
-   # 向量的反对称矩阵
-   function hat(v)
-       [0 -v[3] v[2];
-        v[3] 0 -v[1];
-        -v[2] v[1] 0]
-   end
-   function L(q)  # 四元数左乘矩阵
-       s = q[1]
-       v = q[2:4]
-       [s    -v';
-        v  s*I+hat(v)]
-   end
-
-   function R(q)  # 四元数右乘矩阵
-       s = q[1]
-       v = q[2:4]
-       [s    -v';
-        v  s*I-hat(v)]
-   end
-   ```
 3. 初始条件
 
    ```julia
@@ -306,6 +301,20 @@ $$
       2.77556e-17  0.0          1.0
 
      ```
+
+## 复现与数值误差
+
+这里的 Julia 片段仍依赖未在本文完整列出的惯性矩阵 `J`、四元数嵌入矩阵 `H`、步长 `h` 和仿真循环；当前不应视为可以独立运行的完整程序。`rkstep` 默认调用旋转矩阵模型，切换到四元数时必须同时更换动力学函数与状态布局，不能只取消归一化注释。
+
+原日志中的 $Q^\top Q$ 已明显偏离单位矩阵，说明直接积分没有严格保持正交性。这是需要检查的误差，而不是正交性验证通过。对四元数归一化有助于维持单位长度，但不能代替积分精度和动力学结果的验证。
+
+## 整理与核查说明
+
+本笔记原有许可为 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。引用的课程材料、代码和图片仍须遵守其各自的许可。
+
+**核查状态：待复现（2026-10-04）。** 已核对四元数顺序与坐标系说明；原旋转积分实验未重新运行。
+
+2026-10-04 整理时修正了已定位的公式和实现问题。文中的图片、动画和输出保留自学习时的实验记录，不代表修订后的代码已经完整重跑。作业片段依赖原项目环境，不能直接作为完整可运行教程；具体核查范围与尚未复现事项见正文。
 
 ## 参考资料
 

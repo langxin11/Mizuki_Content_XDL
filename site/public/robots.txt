@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://langxin11.github.io/sitemap-index.xml

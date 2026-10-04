@@ -1,0 +1,13 @@
+[
+  {"file":"posts/Astro blog搭建.md","status":"部分验证","public":true,"scope":"已核对官方部署方法；本轮迁移的实际部署结果另行记录，不把旧工作流示例当作当前模板。"},
+  {"file":"posts/记录wsl2无法运行的修复过程.md","status":"待复现","public":true,"scope":"保留为历史故障记录；未验证完整备份恢复链条，已撤下可照做的卸载重装步骤。"},
+  {"file":"posts/CMU_最优控制学习记录1.md","status":"部分验证","public":true,"scope":"已核对主要公式，并用小型数值例子检验 KKT Jacobian；整套课程作业未重新运行。"},
+  {"file":"posts/CMU_最优控制学习记录2.md","status":"部分验证","public":true,"scope":"已核对离散化、LQR 与二次规划关系及维度；完整摆杆实验未重新运行。"},
+  {"file":"posts/CMU_最优控制学习记录3.md","status":"部分验证","public":true,"scope":"Julia 1.10.10 验证 MPC 分块尺寸、初态残差及 Hessian；未执行完整 OSQP 和航天器实验。"},
+  {"file":"posts/CMU_最优控制学习记录4 .md","status":"部分验证","public":true,"scope":"Julia 1.10.10 的简化线性测试检验 iLQR 递推与线搜索拒绝逻辑；原四旋翼和 DIRCOL 实验待复现。"},
+  {"file":"posts/CMU_最优控制学习记录5.md","status":"待复现","public":true,"scope":"已核对四元数顺序与坐标系说明；原旋转积分实验未重新运行。"},
+  {"file":"posts/知乎迁入/matplotlib-chinese-mathtext/index.md","status":"已核查","public":false,"scope":"迁入示例已在 Matplotlib 3.10.6 生成 PNG/PDF；验证限于该环境，不保证所有系统都安装同一字体。"},
+  {"file":"posts/知乎迁入/julia-vscode-intellisense/index.md","status":"部分验证","public":false,"scope":"已核对 Juliaup 命令及日志的适用条件；原 VS Code 扩展版本缺失，未复现完整故障。"},
+  {"file":"posts/知乎迁入/ubuntu-wezterm/index.md","status":"待复现","public":false,"scope":"已核对官方安装文档及配置版本条件；Ubuntu 24.04 的实际安装和配置验证尚未完成。"},
+  {"file":"posts/知乎迁入/onshape-mujoco-closed-loop/index.md","status":"待复现","public":false,"scope":"已核对命名规则、MuJoCo 版本及求解参数；缺实际导出 XML、工具版本和闭环残差数据。"}
+]

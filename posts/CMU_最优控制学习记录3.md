@@ -1,23 +1,36 @@
 ---
-title: CMU Optimal control and reinforcement learning 16-745 2025学习简要记录3
+title: CMU 最优控制笔记 3：凸 MPC、航天器交会与无人机悬停
 author: Daliang
 published: 2025-07-28
+updated: 2026-10-04
+description: 从 LQR 的约束处理局限出发，整理滚动优化、预测矩阵与 OSQP 建模，并结合交会和悬停案例理解 MPC。
 toc: true
 toc-depth: 4
 toc-title: Contents
 tags:
-  - 优化控制
-  - LQR/MPC/DDP
+  - 最优控制
+  - MPC
+  - OSQP
+  - Julia
 category: "CMU Optimal Control 16-745"
 licenseName: "CC BY 4.0"
 ---
-# CMU Optimal control and reinforcement learning 16-745 2025学习简要记录3
 
-主要是配合Homework来的（在[课程官网答案](https://optimalcontrol.ri.cmu.edu/homeworks/)有完整的代码）
+学习模型预测控制（MPC）时，我主要关注模型、代价和约束如何组成一个滚动求解的问题。这篇笔记重点整理凸 MPC，以及它与一次性轨迹优化和 LQR 的区别。
 
-较早的更完整的课程记录可以参考[向阳的笔记](https://github.com/Zhihaibi/Optimal_control_16-745/blob/main/CMU16_745_Optimial%20control%20Lecture_Notes_zhihai%20Bi.pdf)和知乎[我爱科研](https://www.zhihu.com/column/c_1635315526615388160) 的整理
+**先修知识：** LQR、线性系统离散化、凸二次规划与基本的稀疏矩阵运算。
 
-## Lecture10 Convex Model-Predictive Control
+**阅读路线：**
+
+1. 用航天器交会案例对照 LQR、凸轨迹优化和凸 MPC。
+2. 通过平面无人机悬停，连接非线性模型、局部线性化与离散模型。
+3. 推导堆叠预测矩阵，再把代价和约束整理为 OSQP 所需的形式。
+
+笔记结合 CMU 16-745 的课程与作业整理，相关材料见[课程作业页面](https://optimalcontrol.ri.cmu.edu/homeworks/)。文中的代码片段保留学习时的实现，运行时还需使用对应作业的依赖与上下文。
+
+其他学习视角可参考[向阳的笔记](https://github.com/Zhihaibi/Optimal_control_16-745/blob/main/CMU16_745_Optimial%20control%20Lecture_Notes_zhihai%20Bi.pdf)和知乎[我爱科研](https://www.zhihu.com/column/c_1635315526615388160) 的整理
+
+## Lecture 10：凸模型预测控制
 
 LQR（线性二次调节器）是控制理论中的经典方法，但存在一些局限
 
@@ -27,8 +40,8 @@ LQR（线性二次调节器）是控制理论中的经典方法，但存在一�
 
 MPC通过**滚动优化**克服LQR的局限性，在每一个时间步求解一个有限时域的优化问题，考虑未来若干步的动力学和约束，并仅应用优化结果的第一步控制输入，下一时间步重新优化，具有以下优势
 
-- **显示处理约束**：将控制限幅、状态约束直接写入优化问题
-- 兼容非线性：通过数值优化处理非线性动力学或代价函数
+- **显式处理约束**：将控制限幅、状态约束直接写入优化问题
+- **可扩展性**：MPC 框架可用于非线性问题，但非线性 MPC 通常不再是凸问题。本文的凸 MPC 依赖线性/仿射动力学、凸代价和凸约束，不能直接套用到任意非线性模型。
 - **适应性**：可实时响应环境变化（如障碍物移动）
 
 ### HW2_Q3 Optimal Rendezvous and Docking航天器交汇
@@ -52,12 +65,13 @@ $$
          0 &    0 & 0 &   0 &  0 &  1\\
          3n^2 &0 & 0  &  0 &  2n &0 \\
          0  &   0 & 0  & -2n &0  & 0\\
-         0  &   0 &-n^2 & 0 &  0 &  0 \end{bmatrix} + \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \\ 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} u
+         0  &   0 &-n^2 & 0 &  0 &  0 \end{bmatrix}x + \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \\ 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} u
 \end{align}
 $$
 
 + $A$矩阵包含轨道动力学效应（科里奥利力、离心力）
-+ $n=\sqrt{u/a^3}$为轨道角速度，其中地球标准动力参数$\mu=3.986\times10^14\bf m^3/s^2$，ISS轨道的半长轴$a=6778 \bf km$
++ $n=\sqrt{\mu/a^3}$ 为轨道平均角速度。下方代码采用 $\mu=3.986004418\times10^{14}\,\mathrm{m^3/s^2}$、$a=6971100\,\mathrm m$；复现时统一按代码参数，不混用其他轨道半径。
++ 上式输入矩阵为单位加速度输入形式；若 $u$ 表示推力，应乘相应的质量倒数。下方代码使用 `0.1*I(3)`，复现时须核对这一输入缩放与单位。
 
 #### Part A: Discretize the dynamics系统离散化
 
@@ -90,7 +104,7 @@ end
 
 #### Part B:LQR
 
-使用有线时域LQR跟踪给定的参考轨迹
+使用有限时域 LQR跟踪给定的参考轨迹
 
 $$
 \begin{align} \min_{x_{1:N},u_{1:N-1}} \quad & \sum_{i=1}^{N-1} \bigg[ \frac{1}{2} (x_i - x_{ref, i})^TQ(x_i - x_{ref, i}) + \frac{1}{2} u_i^TRu_i \bigg] + \frac{1}{2}(x_N- x_{ref, N})^TQ_f
@@ -100,7 +114,7 @@ $$
  \end{align}
 $$
 
-求得控制策略$u_i = -K_i(x_i - x_{ref, i})$，并进行限幅 `clamp.(u, u_min, u_max)`
+下方实现使用 $u_i=-K_i(x_i-x_{ref,i})$ 并进行限幅。它是围绕参考状态的反馈实验；对一般参考轨迹，仅计算调节器增益并减去参考状态，不足以求解上面完整的跟踪最优化问题，还需要参考输入/仿射前馈项及轨迹可行性处理。限幅也会改变无约束 LQR 的最优性与稳定性结论。
 
 ```julia
 # TODO: FHLQR 
@@ -153,7 +167,7 @@ for i = 1:(N-1)
 end
 ```
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_LQR.svg)
+![](/images/blog/HW2_Q3_LQR.svg)
 
 #### Part C: Convex Trajectory Optimization
 
@@ -242,7 +256,7 @@ function convex_trajopt(A::Matrix, # discrete dynamics A
 end
 ```
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_convex.svg)
+![](/images/blog/HW2_Q3_convex.svg)
 
 #### Part D: Convex MPC
 
@@ -336,20 +350,22 @@ function convex_mpc(A::Matrix, # discrete dynamics matrix A
 end
 ```
 
-![](https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_MPC.svg)
+![](/images/blog/HW2_Q3_MPC.svg)
 
-<img src="https://raw.githubusercontent.com/langxin11/Picture/main/blog/HW2_Q3_MPC.gif" style="zoom: 33%;" />
+<img src="/images/blog/HW2_Q3_MPC.gif" style="zoom: 33%;" />
 
 ### 无人机悬停案例
 
-1.平面无人机动力学
+1. 平面无人机动力学
+
+为与下方实现一致，这里令 $l$ 表示两电机间距，因此每侧推力到质心的力臂为 $l/2$。
 
 $$
 \begin{align}
 
 \ddot{x}&=\frac{1}{m}(u_1+u_2)sin\theta\\
 \ddot{y}&=\frac{1}{m}(u_1+u_2)cos\theta-g\\
-\ddot{\theta}&=\frac{1}{J}l^2(u_2-u_1)\\
+\ddot{\theta}&=\frac{l}{2J}(u_2-u_1)\\
 \end{align}
 $$
 
@@ -360,7 +376,7 @@ $$
 \begin{align}
 \Delta\ddot{x}&=g\theta\\
 \Delta\ddot{y}&=\frac{1}{m}(\Delta u_1+\Delta u_2)\\
-\Delta\ddot{\theta}&=\frac{1}{J}l^2(\Delta u_2-\Delta u_1)\\
+\Delta\ddot{\theta}&=\frac{l}{2J}(\Delta u_2-\Delta u_1)\\
 \end{align}
 $$
 
@@ -372,7 +388,7 @@ $$
 
 \begin{bmatrix}{\Delta x}\\ {\Delta y} \\ {\Delta \theta}\\\Delta \dot{x}\\ \Delta \dot{y} \\ \Delta\dot{\theta} \end{bmatrix}
 +
-\begin{bmatrix}0&0\\0&0 \\0&0 \\0&0 \\ \frac{1}{m}&\frac{1}{m}\\-\frac{l^2}{J}&\frac{l^2}{J}\end{bmatrix}
+\begin{bmatrix}0&0\\0&0 \\0&0 \\0&0 \\ \frac{1}{m}&\frac{1}{m}\\-\frac{l}{2J}&\frac{l}{2J}\end{bmatrix}
 \begin{bmatrix}\Delta u_1\\ \Delta u_2\end{bmatrix}
 \end{align}
 $$
@@ -422,80 +438,57 @@ $$
 {x}_{k+1}=Ax_k+Bu_k
 $$
 
-定义未来$p$个周期内预测的系统状态$(n_xn_h\times1)$
+定义预测时域为 $p$，状态维度为 $n_x$，输入维度为 $n_u$。堆叠变量为
 
 $$
-X_k=[x_{k+1|k} ^\top,x_{k+2|k} ^\top,...,x_{k+p|k} ^\top]^\top
+X_k=\begin{bmatrix}x_{k+1|k}\\\vdots\\x_{k+p|k}\end{bmatrix}\in\mathbb R^{pn_x},\qquad
+U_k=\begin{bmatrix}u_{k|k}\\\vdots\\u_{k+p-1|k}\end{bmatrix}\in\mathbb R^{pn_u}.
 $$
 
-定义未来到达$p$个周期内的系统输入$(n_un_h\times1)$
+逐步代入动力学，可以得到
 
 $$
-U_k=[u_{k|k} ^\top,u_{k+1|k} ^\top,...,u_{k+p-1|k} ^\top]^\top
+x_{k+i|k}=A^i x_{k|k}+\sum_{j=0}^{i-1}A^{i-1-j}B u_{k+j|k},
+\qquad i=1,\ldots,p.
 $$
 
-由系统离散动力学方程可以得到$x_{k|k}\rightarrow x_{k+h|k}$的状态转移方程
+因此 $X_k=\Phi x_{k|k}+\Gamma U_k$，其中
 
 $$
-\begin{align}
-x_{k+1|k}&=Ax_{k|k}+Bu_{k|k}\\
-x_{k+2|k}&=A^2x_{k|k}+ABu_{k|k}+Bu_{k+1|k}\\
-...&\\
-x_{k+p|k}&=A^px_{k|k}+A^{p-1}Bu_{k|k}+...+ABu_{k+p-1|k}+Bu_{k+p|k}
-\end{align}
+\Phi=\begin{bmatrix}A\\A^2\\\vdots\\A^p\end{bmatrix},\qquad
+\Gamma=\begin{bmatrix}
+B&0&\cdots&0\\
+AB&B&\cdots&0\\
+\vdots&\vdots&\ddots&\vdots\\
+A^{p-1}B&A^{p-2}B&\cdots&B
+\end{bmatrix}.
 $$
 
-写成矩阵形式
+对于零参考状态的调节问题，选取
 
 $$
-X_k=\Phi x_{k|k}+\Gamma U_k
+J=\frac12\sum_{i=1}^{p-1}x_{k+i|k}^{\top}Qx_{k+i|k}
++\frac12x_{k+p|k}^{\top}Q_Nx_{k+p|k}
++\frac12\sum_{i=0}^{p-1}u_{k+i|k}^{\top}Ru_{k+i|k}.
 $$
 
-其中
+令 $\Omega=\operatorname{diag}(Q,\ldots,Q,Q_N)$、$\Psi=\operatorname{diag}(R,\ldots,R)$，则
 
 $$
-\begin{align}
-\Phi = \begin{bmatrix}A\\A^2\\\vdots \\ A^p\end{bmatrix}\quad
-\Gamma = \begin{bmatrix}B& \mathbf{0}&\dots&\mathbf{0}\\AB&B& \dots&\mathbf{0}\\\vdots &\vdots&&\vdots\\A^{p-1}B&  B&\dots&AB\end{bmatrix}
-\end{align}
+J=\frac12X_k^\top\Omega X_k+\frac12U_k^\top\Psi U_k
+=\frac12U_k^\top H U_k+U_k^\top F x_{k|k}+\text{const},
 $$
 
-二次型性能指标
-
 $$
-\begin{align}
-J&=\sum_{i=1}^{p-1}(\frac{1}{2}{x_{k+i|k}^\top}Qx_{k+i|k} + \frac{1}{2}{u_{k+i|k}^\top}Ru_{k+i|k})+\frac{1}{2}{x_{k+p|k}^\top}Q_Nx_{k+p|k}\\
-&=\frac{1}{2}{x_{k|k}^\top}Qx_{k|k}+\frac{1}{2}X_{k}^\top\Omega X_{k} + \frac{1}{2}U_{k}^\top\Psi U_{k}
-\end{align}
+H=\Gamma^\top\Omega\Gamma+\Psi,\qquad
+F=\Gamma^\top\Omega\Phi.
 $$
 
-其中
+常数项只与当前状态有关，不影响最优输入。此前笔记的最后一步输入索引和 $\Gamma$ 最后一行次序有误，已按上述递推统一。跟踪非零参考时，还需把参考轨迹引入代价中的线性项。
 
-$$
-\begin{align}
-\Omega = \begin{bmatrix}Q&\dots&\mathbf{0}\\\vdots&Q&\vdots \\ \mathbf{0}&\dots&Q_N\end{bmatrix}\quad
-\Psi = \begin{bmatrix}R&\dots&\mathbf{0}\\\vdots&\ddots&\vdots \\ \mathbf{0}&\dots&R\end{bmatrix}\quad\end{align}
-$$
+### OSQP 求解器的使用
 
-在通过变换用$U_k$表示$X_k$（忽略$x_{k|k}$决定项）
-
-$$
-\begin{align}
-J&=\frac{1}{2}U_k^\top \mathbf{H}U_k+U_k^\top \mathbf{F}x_{k|k}
-\end{align}
-$$
-
-其中
-
-$$
-\begin{align}
-\mathbf{H}=\Gamma ^\top\Omega\Gamma+\Psi, \quad \mathbf{F}=\Gamma ^\top\Omega\Phi
-\end{align}
-$$
-
-### osqp求解器的使用
-
-QSQP求解器是一个用于求解凸二次规划（形式如下）的数值优化软件包
+OSQP 求解器是一个用于求解凸二次规划（形式如下）的数值优化软件包
 
 $$
 \begin{split}\begin{array}{ll}
@@ -504,13 +497,13 @@ $$
 \end{array}\end{split}
 $$
 
-其中$x$是优化变量，$P\in \mathbf{S}_+^n$s是一个半正定矩阵。
+其中 $x$ 是优化变量，$P\in\mathbf S_+^n$ 是对称半正定矩阵。
 
 考虑一个线性时不变动力学系统到某个参考状$x_r\in \mathcal{R}^{n_x}$的问题
 
 $$
 \begin{split}\begin{array}{ll}
-  \text{minimize}   & (x_N-x_r)^T Q_N (x_N-x_r) + \sum_{k=0}^{N-1} (x_k-x_r)^T Q (x_k-x_r) + u_k^T R u_k \\
+  \text{minimize}   & (x_N-x_r)^T Q_N (x_N-x_r) + \sum_{k=0}^{N-1}\left[(x_k-x_r)^T Q (x_k-x_r) + u_k^T R u_k\right] \\
   \text{subject to} & x_{k+1} = A x_k + B u_k \\
                     & x_{\rm min} \le x_k  \le x_{\rm max} \\
                     & u_{\rm min} \le u_k  \le u_{\rm max} \\
@@ -537,30 +530,71 @@ umin = [0.2*m*g; 0.2*m*g]
 umax = [0.6*m*g; 0.6*m*g]
 ```
 
-2.转换成标准QP问题
+2. 转换成标准 QP 问题
 
 优化变量
 
 $$
-z=[x_1^T,x_2^T,\dots,x_p^T,u_0^T,u_1^T,\dots,u_{p-1}^T]^\top
+z=[u_0^T,x_1^T,u_1^T,x_2^T,\dots,u_{p-1}^T,x_p^T]^\top
 $$
 
 $$
-J=z^\top \text{diag}(Q,\dots,Q,Q_N,R,...,R)z+2[Qx_{r_1},\dots,Qx_{r_k},\mathbf{0},\dots,\mathbf{0}]z
+J=z^\top Wz-2c^\top z+\mathrm{const},\qquad
+W=\operatorname{diag}(R,Q,\ldots,R,Q_N),\quad
+c=[0;Qx_r;\ldots;0;Q_Nx_r].
 $$
+
+对于这里不含 $1/2$ 的代价，OSQP 应取 $P=2W$、$q=-2c$；跟踪代价的线性项是负号。以下悬停示例改用含 $1/2$ 的误差代价，参考是平衡点，变量依次为 $[\Delta u_0;\Delta x_1;\ldots]$，因此 `H=W`、`b=0`。此示例只添加推力限制，未添加上面通式的状态限制。
+
+原代码的 `rob`/`prob` 名称不一致，且缺少 `Nh`、终端权重定义和非零初态右端项；已改为明确分块组装。依赖前面的离散模型和参数；尚未在锁定的 OSQP.jl 环境中运行，下面提供建模示例而非经过仿真验证的控制器。
 
 ```julia
-U = kron(Diagonal(I,Nh), [I zeros(Nu,Nx)]) #Matrix that picks out all u
-Θ = kron(Diagonal(I,Nh), [0 0 0 0 1 0 0 0]) #Matrix that picks out all x3 (θ)
-H = sparse([kron(Diagonal(I,Nh-1),[R zeros(Nu,Nx); zeros(Nx,Nu) Q]) zeros((Nx+Nu)*(Nh-1), Nx+Nu); zeros(Nx+Nu,(Nx+Nu)*(Nh-1)) [R zeros(Nu,Nx); zeros(Nx,Nu) P]])
-b = zeros(Nh*(Nx+Nu))
-C = sparse([[B -I zeros(Nx,(Nh-1)*(Nu+Nx))]; zeros(Nx*(Nh-1),Nu) [kron(Diagonal(I,Nh-1), [A B]) zeros((Nh-1)*Nx,Nx)] + [zeros((Nh-1)*Nx,Nx) kron(Diagonal(I,Nh-1),[zeros(Nx,Nu) Diagonal(-I,Nx)])]])
+using SparseArrays
+Nh = 20
+nb = Nu + Nx
+uidx(k) = ((k-1)*nb+1):((k-1)*nb+Nu)
+xidx(k) = ((k-1)*nb+Nu+1):(k*nb)
+H = spzeros(Nh*nb, Nh*nb)
+C = spzeros(Nh*Nx, Nh*nb)
+S = spzeros(Nh*Nu, Nh*nb)  # 提取输入
+for k in 1:Nh
+    rows = ((k-1)*Nx+1):(k*Nx)
+    H[uidx(k), uidx(k)] = R
+    H[xidx(k), xidx(k)] = k == Nh ? Qn : Q
+    C[rows, uidx(k)] = B
+    C[rows, xidx(k)] = -Matrix{Float64}(I, Nx, Nx)
+    if k > 1
+        C[rows, xidx(k-1)] = A
+    end
+    S[((k-1)*Nu+1):(k*Nu), uidx(k)] = Matrix{Float64}(I, Nu, Nu)
+end
+b = zeros(Nh*nb)
+D = [C; S]
+rhs = zeros(Nh*Nx)
+lb = [rhs; repeat(umin-u_hover, Nh)]
+ub = [rhs; repeat(umax-u_hover, Nh)]
+prob = OSQP.Model()
+OSQP.setup!(prob; P=H, q=b, A=D, l=lb, u=ub, verbose=false)
 
-#Dynamics + Thrust limit constraints
-D = [C; U]
-lb = [zeros(Nx*Nh); kron(ones(Nh),umin-u_hover)]
-ub = [zeros(Nx*Nh); kron(ones(Nh),umax-u_hover)]
-
-rob = OSQP.Model()
-OSQP.setup!(prob; P=H, q=b, A=D, l=lb, u=ub, verbose=false, eps_abs=1e-8, eps_rel=1e-8, polish=1);
+function hover_control(x_now)
+    # B*δu₀ - δx₁ = -A*δx₀，初态必须进入每次优化。
+    rhs[1:Nx] = -A*(x_now-x_hover)
+    lb[1:Nh*Nx] = rhs
+    ub[1:Nh*Nx] = rhs
+    OSQP.update!(prob; l=lb, u=ub)
+    result = OSQP.solve!(prob)
+    # 演示采用严格成功判据；失败时交由调用方处理，不能盲用 result.x。
+    result.info.status == :Solved || error("QP 未成功求解：$(result.info.status)")
+    return u_hover + result.x[uidx(1)]
+end
 ```
+
+接口和求解状态见 [OSQP 的 Julia 文档](https://osqp.org/docs/interfaces/julia.html)与所安装的 OSQP.jl 版本。真正的 MPC 仿真还需每步调用控制器、用真实模型推进，并记录约束残差、闭环状态与求解耗时；求解成功不等于非线性系统一定稳定。
+
+## 整理与核查说明
+
+本笔记原有许可为 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。引用的课程材料、代码和图片仍须遵守其各自的许可。
+
+**核查状态：部分验证（2026-10-04）。** Julia 1.10.10 验证 MPC 分块尺寸、初态残差及 Hessian；未执行完整 OSQP 和航天器实验。
+
+2026-10-04 整理时修正了已定位的公式和实现问题。文中的图片、动画和输出保留自学习时的实验记录，不代表修订后的代码已经完整重跑。作业片段依赖原项目环境，不能直接作为完整可运行教程；具体核查范围与尚未复现事项见正文。
