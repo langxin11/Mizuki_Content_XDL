@@ -9,6 +9,7 @@ const site = path.join(root, 'site');
 const targets = { posts: 'shirones/content/posts', spec: 'shirones/content/spec', images: 'public/images' };
 const timers = new Map();
 const watchers = [];
+let syncQueue = Promise.resolve();
 for (const [name, generated] of Object.entries(targets)) {
   const sourceDir = path.join(root, name);
   const destDir = path.join(site, generated);
@@ -19,14 +20,18 @@ for (const [name, generated] of Object.entries(targets)) {
     const target = path.resolve(destDir, relative);
     if (!source.startsWith(sourceDir + path.sep) || !target.startsWith(destDir + path.sep)) return;
     clearTimeout(timers.get(target));
-    timers.set(target, setTimeout(async () => {
-      try {
-        const stat = await lstat(source).catch(() => null);
-        if (stat?.isSymbolicLink()) throw new Error('Content links are not synchronized');
-        if (stat) await cp(source, target, { recursive:stat.isDirectory() });
-        else await rm(target, { recursive:true, force:true });
-      } catch (error) { console.error(`Content synchronization failed: ${error.message}`); }
-      finally { timers.delete(target); }
+    timers.set(target, setTimeout(() => {
+      timers.delete(target);
+      // Serialize parent-folder and file events: concurrent cp() calls can unlink
+      // the same generated image while an editor or Git updates multiple files.
+      syncQueue = syncQueue.then(async () => {
+        try {
+          const stat = await lstat(source).catch(() => null);
+          if (stat?.isSymbolicLink()) throw new Error('Content links are not synchronized');
+          if (stat) await cp(source, target, { recursive:stat.isDirectory() });
+          else await rm(target, { recursive:true, force:true });
+        } catch (error) { console.error(`Content synchronization failed: ${error.message}`); }
+      });
     }, 300));
   }));
 }
