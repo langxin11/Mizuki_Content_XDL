@@ -1,0 +1,14 @@
+{
+  "checked": "2026-10-04",
+  "system": "Windows",
+  "python": "3.13.9",
+  "matplotlib": "3.10.6",
+  "numpy": "2.3.5",
+  "font": "SimSun",
+  "png_dimensions": [
+    1800,
+    1200
+  ],
+  "pdf_bytes": 26180,
+  "scope": "Runs the article configuration and complete plot/export example; does not validate other systems."
+}

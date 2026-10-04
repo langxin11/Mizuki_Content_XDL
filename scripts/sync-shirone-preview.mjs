@@ -73,6 +73,7 @@ await configure('announcementConfig.ts', text => text
   .replace('The only way to do great work is to love what you do', `本地预览：${posts} 篇笔记，含 ${drafts} 篇知乎迁入草稿。未完整复现的实验已在正文注明。`)
   .replace('enable: true', 'enable: false'));
 await configure('postListConfig.ts', text => text.replace('pageSize: 8', 'pageSize: 12'));
+await configure('licenseConfig.ts', text => text.replace('enable: true', 'enable: false'));
 for (const name of ['friends', 'moments', 'anime', 'compass', 'albums', 'skills', 'projects', 'devices', 'games', 'timeline', 'series', 'music', 'umami', 'comment', 'llms']) {
   await configure(`${name}Config.ts`, text => text.replace(/(\n\s*)enable: true/, '$1enable: false'));
 }
