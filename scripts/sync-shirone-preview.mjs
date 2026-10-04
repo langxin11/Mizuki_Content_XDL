@@ -74,6 +74,9 @@ await configure('announcementConfig.ts', text => text
   .replace('enable: true', 'enable: false'));
 await configure('postListConfig.ts', text => text.replace('pageSize: 8', 'pageSize: 12'));
 await configure('licenseConfig.ts', text => text.replace('enable: true', 'enable: false'));
+const previewTocDir = path.join(preview, 'src', 'components', 'atoms', 'blog');
+await mkdir(previewTocDir, { recursive: true });
+await cp(path.join(root, 'site', 'src', 'components', 'atoms', 'blog', 'TocList.astro'), path.join(previewTocDir, 'TocList.astro'));
 for (const name of ['friends', 'moments', 'anime', 'compass', 'albums', 'skills', 'projects', 'devices', 'games', 'timeline', 'series', 'music', 'umami', 'comment', 'llms']) {
   await configure(`${name}Config.ts`, text => text.replace(/(\n\s*)enable: true/, '$1enable: false'));
 }
