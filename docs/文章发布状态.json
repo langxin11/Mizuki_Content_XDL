@@ -9,5 +9,5 @@
   {"file":"posts/知乎迁入/matplotlib-chinese-mathtext/index.md","status":"已核查","public":false,"scope":"迁入示例已在 Matplotlib 3.10.6 生成 PNG/PDF；验证限于该环境，不保证所有系统都安装同一字体。"},
   {"file":"posts/知乎迁入/julia-vscode-intellisense/index.md","status":"部分验证","public":false,"scope":"已核对 Juliaup 命令及日志的适用条件；原 VS Code 扩展版本缺失，未复现完整故障。"},
   {"file":"posts/知乎迁入/ubuntu-wezterm/index.md","status":"待复现","public":false,"scope":"已核对官方安装文档及配置版本条件；Ubuntu 24.04 的实际安装和配置验证尚未完成。"},
-  {"file":"posts/知乎迁入/onshape-mujoco-closed-loop/index.md","status":"待复现","public":false,"scope":"已核对命名规则、MuJoCo 版本及求解参数；缺实际导出 XML、工具版本和闭环残差数据。"}
+  {"file":"posts/知乎迁入/onshape-mujoco-closed-loop/index.md","status":"部分验证","public":false,"scope":"真实仓库资产在 MuJoCo 3.10.0/3.4.0 通过 VFS 编译与固定基座空载检查；已记录闭环残差，原导出版本、CAD 再导出及接触实验未复现。"}
 ]

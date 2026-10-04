@@ -1,0 +1,552 @@
+{
+  "checked": "2026-10-05",
+  "python": "3.13.9",
+  "system": "Windows",
+  "mujoco": "3.4.0",
+  "numpy": "2.3.5",
+  "source_commit": "b5b10deaa1b15f05f71aec59cfeb2d813d251656",
+  "loader": "MuJoCo VFS with ASCII aliases for unchanged mesh bytes; direct file loading is checked separately per model.",
+  "scope": "Compile real assets and test fixed-base empty-load motion; no CAD re-export, external-object contact, hardware or tactile calibration validation.",
+  "models": [
+    {
+      "model": "parallel_gripper.xml",
+      "xml_sha256": "38c5896687009f6ead141228a9504ab759ee564b21c1bb46bf783afeb8e60c5f",
+      "mesh_count": 27,
+      "meshes": [
+        {
+          "file": "motor.stl",
+          "sha256": "82aa74a4581ddf3d7b21851d7fe1caa861bde61be155fa7a8c8596053684b408"
+        },
+        {
+          "file": "bracket.stl",
+          "sha256": "5aad640d6f9d9e16986e36da75dd4822a3589582d6c6c6b0c43435c3e3461424"
+        },
+        {
+          "file": "part_2.stl",
+          "sha256": "18822fca73c1c4924ae30db4bda2d47c923251d2d45d4d295331748ff86a218a"
+        },
+        {
+          "file": "crank.stl",
+          "sha256": "144650ad6f843f91672ae0b4619540c974a916409663abe413cab01087f77127"
+        },
+        {
+          "file": "pillars_0.stl",
+          "sha256": "51efd63ab568f4aa974eda12e04a1cd47aa23a254975b975c834dd25946f89da"
+        },
+        {
+          "file": "shim.stl",
+          "sha256": "19cb8e4ba5d619a7f6b9eaaa3e0470b3af4554f60376ada3f5fe7a0f9199ed69"
+        },
+        {
+          "file": "pillars_1.stl",
+          "sha256": "209cd16dd7816bd6f64aebc5bfa7e0c672f2121adf2a9116b9643d2b65f6ea6c"
+        },
+        {
+          "file": "pillars_4.stl",
+          "sha256": "03a6a66dcf40f35dfd52e5b596f55e54116eb3d0f3c10e91245fd6a2ac1deb76"
+        },
+        {
+          "file": "part_1__配置.stl",
+          "sha256": "a91df5311f4d3eedcdbfe0aafca12b3d004b3fc5da934e52f10762d611b49132"
+        },
+        {
+          "file": "pillars_5.stl",
+          "sha256": "902a6e5922fda416128570fc10c1d4224dac2a98822bf82466aac6248d66cf3d"
+        },
+        {
+          "file": "part_1.stl",
+          "sha256": "fdc3c9abfe60dd02dd47c6a4870221b2f8390fb28d450ed19eb382dc58bbdba3"
+        },
+        {
+          "file": "ls__mgn9_block__6faf12bd810aab5c7f7b6a160ef20d75.stl",
+          "sha256": "3acdfada163554fc827bb7863b395955351af78b42936eeb619be63c1de96c38"
+        },
+        {
+          "file": "pillars_3.stl",
+          "sha256": "b6c337ec56c5b543b257e037b56621fc913a505726e401a670b90798dbe835e3"
+        },
+        {
+          "file": "8x4x2_flanged_bearing.stl",
+          "sha256": "6561477040f18f76f560018667ea83cda66ed8d823109f680f299cc06d2b0712"
+        },
+        {
+          "file": "pillars_8.stl",
+          "sha256": "550c79b199e4ba25087c30756f863a516957348394faa7582c82f5d241185116"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__2.stl",
+          "sha256": "c638ca3c98f4be908baec14720b2d130c8e702895ce5887456a0eec33a64915d"
+        },
+        {
+          "file": "base.stl",
+          "sha256": "ab3f9148335fc5e0c732f5d1db5d34937fb6af12da4cf9817abcbf29ce10358b"
+        },
+        {
+          "file": "ls__mgn9_rail__6faf12bd810aab5c7f7b6a160ef20d75.stl",
+          "sha256": "7aebafeeea61e1527dc4700b5e9fcf55510ac27d79d25c9818e31da727f1785a"
+        },
+        {
+          "file": "part_3.stl",
+          "sha256": "98f175ccb744db1f6279e0e3700fedcfa481f1883e6f36b4d590bf704948403e"
+        },
+        {
+          "file": "stator.stl",
+          "sha256": "5ddc72ef2da7a02a9f999f25964454ae6b0c9d48e43b02168b50656faeb5da8a"
+        },
+        {
+          "file": "pillars_6.stl",
+          "sha256": "b8faf3b17c10e287ce2f51c7e0c054fbcd79bf06e44103b1865f25016d4c3cc8"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__3.stl",
+          "sha256": "3e198f323ce005b6a69b088f4a4b25e7124cd321c40022b9a78b8d7e9baf1221"
+        },
+        {
+          "file": "pillars_7.stl",
+          "sha256": "45095bbecb1e2acfb883d63f38fe8dc95f34b9fd6815ad3d8f375394efdde3b0"
+        },
+        {
+          "file": "pillars_2.stl",
+          "sha256": "6b4aa0d18aa80338d42081b836cc5116c38c1a4b28b76aec5e4df5a9eedbb17a"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__4.stl",
+          "sha256": "76fec593e58a69c4aab444f621267a0466fa0032551c7d9a8c7e0ff471170740"
+        },
+        {
+          "file": "link.stl",
+          "sha256": "352aeef1d29b621fb463c81ffeb974219ded3e655b3d92ec9486f85442ff2536"
+        },
+        {
+          "file": "housing.stl",
+          "sha256": "dd1ad0b33eae2d5a06e069cd5ad36292038119e2a6ce8d3c5c3cf07142d6328a"
+        }
+      ],
+      "direct_file_load": {
+        "success": false,
+        "error": "Error: Error opening file 'F:\\Workspace/Mine/Mizuki-Content/preview/gripper-validation/source/assets/grippers/dm_gripper/assets/part_1__配置.stl': No such file or directory"
+      },
+      "original_nq": 13,
+      "fixed_base_nq": 6,
+      "actuator_count": 1,
+      "actuator": {
+        "class": "parallel_gripper",
+        "name": "gripper_drive",
+        "joint": "gripper_drive",
+        "gear": "1",
+        "ctrlrange": "-4 4",
+        "forcerange": "-4 4"
+      },
+      "equality_count": 4,
+      "initial_closure_m": [
+        8.061144059867131e-13,
+        8.061144058672555e-13,
+        8.061144059867131e-13,
+        8.061144058672555e-13
+      ],
+      "runtime_changes": [
+        "Remove base_freejoint in memory to attach base to world; no other MJCF changes."
+      ],
+      "duration_s": 19.999999999999794,
+      "timestep_s": 0.002,
+      "solver": "mjSOL_NEWTON",
+      "drive_reference": {
+        "range_rad": [
+          0,
+          1.2
+        ],
+        "period_s": 10.0,
+        "kp_Nm_per_rad": 5.0,
+        "kd_Nm_s_per_rad": 0.2
+      },
+      "maximum_closure_mm": [
+        0.0004286451586914898,
+        0.0004286451586914898,
+        0.0004286451586914898,
+        0.0004286451586914898
+      ],
+      "rms_closure_mm": [
+        0.00012113758703901923,
+        0.00012113758703901923,
+        0.00012113758703901607,
+        0.00012113758703901607
+      ],
+      "maximum_parallel_angle_deg": 1.7075472925031877e-06,
+      "maximum_slider_difference_mm": 6.938893903907228e-15,
+      "slider_travel_mm": [
+        33.57066208677362,
+        33.57066208677362
+      ],
+      "maximum_drive_tracking_error_rad": 0.013481849413232383,
+      "maximum_contacts": 0,
+      "warnings": {},
+      "criteria": {
+        "maximum_closure_mm": 0.1,
+        "maximum_parallel_angle_deg": 0.1,
+        "minimum_slider_travel_mm": 5.0,
+        "warnings": 0
+      },
+      "empty_load_test_passed": true
+    },
+    {
+      "model": "parallel_gripper_prepared.xml",
+      "xml_sha256": "bff58e2a6ad31575b77681951d09836bf2cce76a1cbcb6138e05580be5ca7441",
+      "mesh_count": 27,
+      "meshes": [
+        {
+          "file": "motor.stl",
+          "sha256": "82aa74a4581ddf3d7b21851d7fe1caa861bde61be155fa7a8c8596053684b408"
+        },
+        {
+          "file": "bracket.stl",
+          "sha256": "5aad640d6f9d9e16986e36da75dd4822a3589582d6c6c6b0c43435c3e3461424"
+        },
+        {
+          "file": "part_2.stl",
+          "sha256": "18822fca73c1c4924ae30db4bda2d47c923251d2d45d4d295331748ff86a218a"
+        },
+        {
+          "file": "crank.stl",
+          "sha256": "144650ad6f843f91672ae0b4619540c974a916409663abe413cab01087f77127"
+        },
+        {
+          "file": "pillars_0.stl",
+          "sha256": "51efd63ab568f4aa974eda12e04a1cd47aa23a254975b975c834dd25946f89da"
+        },
+        {
+          "file": "shim.stl",
+          "sha256": "19cb8e4ba5d619a7f6b9eaaa3e0470b3af4554f60376ada3f5fe7a0f9199ed69"
+        },
+        {
+          "file": "pillars_1.stl",
+          "sha256": "209cd16dd7816bd6f64aebc5bfa7e0c672f2121adf2a9116b9643d2b65f6ea6c"
+        },
+        {
+          "file": "pillars_4.stl",
+          "sha256": "03a6a66dcf40f35dfd52e5b596f55e54116eb3d0f3c10e91245fd6a2ac1deb76"
+        },
+        {
+          "file": "part_1__配置.stl",
+          "sha256": "a91df5311f4d3eedcdbfe0aafca12b3d004b3fc5da934e52f10762d611b49132"
+        },
+        {
+          "file": "pillars_5.stl",
+          "sha256": "902a6e5922fda416128570fc10c1d4224dac2a98822bf82466aac6248d66cf3d"
+        },
+        {
+          "file": "part_1.stl",
+          "sha256": "fdc3c9abfe60dd02dd47c6a4870221b2f8390fb28d450ed19eb382dc58bbdba3"
+        },
+        {
+          "file": "ls__mgn9_block__6faf12bd810aab5c7f7b6a160ef20d75.stl",
+          "sha256": "3acdfada163554fc827bb7863b395955351af78b42936eeb619be63c1de96c38"
+        },
+        {
+          "file": "pillars_3.stl",
+          "sha256": "b6c337ec56c5b543b257e037b56621fc913a505726e401a670b90798dbe835e3"
+        },
+        {
+          "file": "8x4x2_flanged_bearing.stl",
+          "sha256": "6561477040f18f76f560018667ea83cda66ed8d823109f680f299cc06d2b0712"
+        },
+        {
+          "file": "pillars_8.stl",
+          "sha256": "550c79b199e4ba25087c30756f863a516957348394faa7582c82f5d241185116"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__2.stl",
+          "sha256": "c638ca3c98f4be908baec14720b2d130c8e702895ce5887456a0eec33a64915d"
+        },
+        {
+          "file": "base.stl",
+          "sha256": "ab3f9148335fc5e0c732f5d1db5d34937fb6af12da4cf9817abcbf29ce10358b"
+        },
+        {
+          "file": "ls__mgn9_rail__6faf12bd810aab5c7f7b6a160ef20d75.stl",
+          "sha256": "7aebafeeea61e1527dc4700b5e9fcf55510ac27d79d25c9818e31da727f1785a"
+        },
+        {
+          "file": "part_3.stl",
+          "sha256": "98f175ccb744db1f6279e0e3700fedcfa481f1883e6f36b4d590bf704948403e"
+        },
+        {
+          "file": "stator.stl",
+          "sha256": "5ddc72ef2da7a02a9f999f25964454ae6b0c9d48e43b02168b50656faeb5da8a"
+        },
+        {
+          "file": "pillars_6.stl",
+          "sha256": "b8faf3b17c10e287ce2f51c7e0c054fbcd79bf06e44103b1865f25016d4c3cc8"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__3.stl",
+          "sha256": "3e198f323ce005b6a69b088f4a4b25e7124cd321c40022b9a78b8d7e9baf1221"
+        },
+        {
+          "file": "pillars_7.stl",
+          "sha256": "45095bbecb1e2acfb883d63f38fe8dc95f34b9fd6815ad3d8f375394efdde3b0"
+        },
+        {
+          "file": "pillars_2.stl",
+          "sha256": "6b4aa0d18aa80338d42081b836cc5116c38c1a4b28b76aec5e4df5a9eedbb17a"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__4.stl",
+          "sha256": "76fec593e58a69c4aab444f621267a0466fa0032551c7d9a8c7e0ff471170740"
+        },
+        {
+          "file": "link.stl",
+          "sha256": "352aeef1d29b621fb463c81ffeb974219ded3e655b3d92ec9486f85442ff2536"
+        },
+        {
+          "file": "housing.stl",
+          "sha256": "dd1ad0b33eae2d5a06e069cd5ad36292038119e2a6ce8d3c5c3cf07142d6328a"
+        }
+      ],
+      "direct_file_load": {
+        "success": false,
+        "error": "Error: Error opening file 'F:\\Workspace/Mine/Mizuki-Content/preview/gripper-validation/source/assets/grippers/dm_gripper/assets/part_1__配置.stl': No such file or directory"
+      },
+      "original_nq": 13,
+      "fixed_base_nq": 6,
+      "actuator_count": 1,
+      "actuator": {
+        "class": "parallel_gripper",
+        "name": "gripper_drive",
+        "joint": "gripper_drive",
+        "gear": "1",
+        "ctrlrange": "-4 4",
+        "forcerange": "-4 4"
+      },
+      "equality_count": 4,
+      "initial_closure_m": [
+        8.061144059867131e-13,
+        8.061144058672555e-13,
+        8.061144059867131e-13,
+        8.061144058672555e-13
+      ],
+      "runtime_changes": [
+        "Remove base_freejoint in memory to attach base to world; no other MJCF changes."
+      ],
+      "duration_s": 19.999999999999794,
+      "timestep_s": 0.002,
+      "solver": "mjSOL_NEWTON",
+      "drive_reference": {
+        "range_rad": [
+          0,
+          1.2
+        ],
+        "period_s": 10.0,
+        "kp_Nm_per_rad": 5.0,
+        "kd_Nm_s_per_rad": 0.2
+      },
+      "maximum_closure_mm": [
+        0.0004286451586914898,
+        0.0004286451586914898,
+        0.0004286451586914898,
+        0.0004286451586914898
+      ],
+      "rms_closure_mm": [
+        0.00012113758703901923,
+        0.00012113758703901923,
+        0.00012113758703901607,
+        0.00012113758703901607
+      ],
+      "maximum_parallel_angle_deg": 1.7075472925031877e-06,
+      "maximum_slider_difference_mm": 6.938893903907228e-15,
+      "slider_travel_mm": [
+        33.57066208677362,
+        33.57066208677362
+      ],
+      "maximum_drive_tracking_error_rad": 0.013481849413232383,
+      "maximum_contacts": 0,
+      "warnings": {},
+      "criteria": {
+        "maximum_closure_mm": 0.1,
+        "maximum_parallel_angle_deg": 0.1,
+        "minimum_slider_travel_mm": 5.0,
+        "warnings": 0
+      },
+      "empty_load_test_passed": true
+    },
+    {
+      "model": "parallel_gripper_height_sphere_collision.xml",
+      "xml_sha256": "f76dc13e6eaa8db906d543b5039a5b6e6cbcc5db1be6c0c1e458adf2e27b93e2",
+      "mesh_count": 27,
+      "meshes": [
+        {
+          "file": "motor.stl",
+          "sha256": "82aa74a4581ddf3d7b21851d7fe1caa861bde61be155fa7a8c8596053684b408"
+        },
+        {
+          "file": "bracket.stl",
+          "sha256": "5aad640d6f9d9e16986e36da75dd4822a3589582d6c6c6b0c43435c3e3461424"
+        },
+        {
+          "file": "part_2.stl",
+          "sha256": "18822fca73c1c4924ae30db4bda2d47c923251d2d45d4d295331748ff86a218a"
+        },
+        {
+          "file": "crank.stl",
+          "sha256": "144650ad6f843f91672ae0b4619540c974a916409663abe413cab01087f77127"
+        },
+        {
+          "file": "pillars_0.stl",
+          "sha256": "51efd63ab568f4aa974eda12e04a1cd47aa23a254975b975c834dd25946f89da"
+        },
+        {
+          "file": "shim.stl",
+          "sha256": "19cb8e4ba5d619a7f6b9eaaa3e0470b3af4554f60376ada3f5fe7a0f9199ed69"
+        },
+        {
+          "file": "pillars_1.stl",
+          "sha256": "209cd16dd7816bd6f64aebc5bfa7e0c672f2121adf2a9116b9643d2b65f6ea6c"
+        },
+        {
+          "file": "pillars_4.stl",
+          "sha256": "03a6a66dcf40f35dfd52e5b596f55e54116eb3d0f3c10e91245fd6a2ac1deb76"
+        },
+        {
+          "file": "part_1__配置.stl",
+          "sha256": "a91df5311f4d3eedcdbfe0aafca12b3d004b3fc5da934e52f10762d611b49132"
+        },
+        {
+          "file": "pillars_5.stl",
+          "sha256": "902a6e5922fda416128570fc10c1d4224dac2a98822bf82466aac6248d66cf3d"
+        },
+        {
+          "file": "part_1.stl",
+          "sha256": "fdc3c9abfe60dd02dd47c6a4870221b2f8390fb28d450ed19eb382dc58bbdba3"
+        },
+        {
+          "file": "ls__mgn9_block__6faf12bd810aab5c7f7b6a160ef20d75.stl",
+          "sha256": "3acdfada163554fc827bb7863b395955351af78b42936eeb619be63c1de96c38"
+        },
+        {
+          "file": "pillars_3.stl",
+          "sha256": "b6c337ec56c5b543b257e037b56621fc913a505726e401a670b90798dbe835e3"
+        },
+        {
+          "file": "8x4x2_flanged_bearing.stl",
+          "sha256": "6561477040f18f76f560018667ea83cda66ed8d823109f680f299cc06d2b0712"
+        },
+        {
+          "file": "pillars_8.stl",
+          "sha256": "550c79b199e4ba25087c30756f863a516957348394faa7582c82f5d241185116"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__2.stl",
+          "sha256": "c638ca3c98f4be908baec14720b2d130c8e702895ce5887456a0eec33a64915d"
+        },
+        {
+          "file": "base.stl",
+          "sha256": "ab3f9148335fc5e0c732f5d1db5d34937fb6af12da4cf9817abcbf29ce10358b"
+        },
+        {
+          "file": "ls__mgn9_rail__6faf12bd810aab5c7f7b6a160ef20d75.stl",
+          "sha256": "7aebafeeea61e1527dc4700b5e9fcf55510ac27d79d25c9818e31da727f1785a"
+        },
+        {
+          "file": "part_3.stl",
+          "sha256": "98f175ccb744db1f6279e0e3700fedcfa481f1883e6f36b4d590bf704948403e"
+        },
+        {
+          "file": "stator.stl",
+          "sha256": "5ddc72ef2da7a02a9f999f25964454ae6b0c9d48e43b02168b50656faeb5da8a"
+        },
+        {
+          "file": "pillars_6.stl",
+          "sha256": "b8faf3b17c10e287ce2f51c7e0c054fbcd79bf06e44103b1865f25016d4c3cc8"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__3.stl",
+          "sha256": "3e198f323ce005b6a69b088f4a4b25e7124cd321c40022b9a78b8d7e9baf1221"
+        },
+        {
+          "file": "pillars_7.stl",
+          "sha256": "45095bbecb1e2acfb883d63f38fe8dc95f34b9fd6815ad3d8f375394efdde3b0"
+        },
+        {
+          "file": "pillars_2.stl",
+          "sha256": "6b4aa0d18aa80338d42081b836cc5116c38c1a4b28b76aec5e4df5a9eedbb17a"
+        },
+        {
+          "file": "8x4x2_flanged_bearing__4.stl",
+          "sha256": "76fec593e58a69c4aab444f621267a0466fa0032551c7d9a8c7e0ff471170740"
+        },
+        {
+          "file": "link.stl",
+          "sha256": "352aeef1d29b621fb463c81ffeb974219ded3e655b3d92ec9486f85442ff2536"
+        },
+        {
+          "file": "housing.stl",
+          "sha256": "dd1ad0b33eae2d5a06e069cd5ad36292038119e2a6ce8d3c5c3cf07142d6328a"
+        }
+      ],
+      "direct_file_load": {
+        "success": false,
+        "error": "Error: Error opening file 'F:\\Workspace/Mine/Mizuki-Content/preview/gripper-validation/source/assets/grippers/dm_gripper/assets/part_1__配置.stl': No such file or directory"
+      },
+      "original_nq": 13,
+      "fixed_base_nq": 6,
+      "actuator_count": 1,
+      "actuator": {
+        "class": "parallel_gripper",
+        "name": "gripper_drive",
+        "joint": "gripper_drive",
+        "gear": "1",
+        "ctrlrange": "-4 4",
+        "forcerange": "-4 4"
+      },
+      "equality_count": 4,
+      "initial_closure_m": [
+        8.061144059867131e-13,
+        8.061144058672555e-13,
+        8.061144059867131e-13,
+        8.061144058672555e-13
+      ],
+      "runtime_changes": [
+        "Remove base_freejoint in memory to attach base to world; no other MJCF changes."
+      ],
+      "duration_s": 19.999999999999794,
+      "timestep_s": 0.002,
+      "solver": "mjSOL_NEWTON",
+      "drive_reference": {
+        "range_rad": [
+          0,
+          1.2
+        ],
+        "period_s": 10.0,
+        "kp_Nm_per_rad": 5.0,
+        "kd_Nm_s_per_rad": 0.2
+      },
+      "maximum_closure_mm": [
+        0.0004286451586914898,
+        0.0004286451586914898,
+        0.0004286451586914898,
+        0.0004286451586914898
+      ],
+      "rms_closure_mm": [
+        0.00012113758703901923,
+        0.00012113758703901923,
+        0.00012113758703901607,
+        0.00012113758703901607
+      ],
+      "maximum_parallel_angle_deg": 1.7075472925031877e-06,
+      "maximum_slider_difference_mm": 6.938893903907228e-15,
+      "slider_travel_mm": [
+        33.57066208677362,
+        33.57066208677362
+      ],
+      "maximum_drive_tracking_error_rad": 0.013481849413232383,
+      "maximum_contacts": 0,
+      "warnings": {},
+      "criteria": {
+        "maximum_closure_mm": 0.1,
+        "maximum_parallel_angle_deg": 0.1,
+        "minimum_slider_travel_mm": 5.0,
+        "warnings": 0
+      },
+      "empty_load_test_passed": true
+    }
+  ]
+}
